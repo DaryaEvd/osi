@@ -1,0 +1,136 @@
+This is the output of a system call trace (strace) for the execution of the "hello" program. Here's what each line means:
+
+execve("./hello", ["./hello"], 0x7fff88b00090 /* 61 vars */) = 0: 
+This line shows the execve system call being made to execute the "hello" program. 
+The program is passed as an argument to execve. The return value of 0 indicates that the call was successful.
+
+brk(NULL) = 0x560651961000: 
+This line shows the brk system call being used to set the program break to the current location. 
+The return value of 0x560651961000 shows the current program break.
+
+arch_prctl(0x3001 /* ARCH_??? */, 0x7ffcfab02260) = -1 EINVAL (Invalid argument): 
+This line shows the arch_prctl system call being used to set architecture-specific thread state.
+In this case, an invalid argument is passed, resulting in an error with a return value of -1 and an EINVAL error code.
+
+access("/etc/ld.so.preload", R_OK) = -1 ENOENT (No such file or directory): 
+This line shows the access system call being used to check if a file exists and is readable. 
+In this case, the file "/etc/ld.so.preload" does not exist, so the return value is -1 and an ENOENT error code.
+
+openat(AT_FDCWD, "/etc/ld.so.cache", O_RDONLY|O_CLOEXEC) = 3: 
+This line shows the openat system call being used to open the dynamic linker cache file "/etc/ld.so.cache" for reading. 
+The return value of 3 indicates that the file was successfully opened.
+
+fstat(3, {st_mode=S_IFREG|0644, st_size=163641, ...}): 
+This call gets information about a file descriptor (3) and stores it in a structure pointed to by the second argument. 
+In this case, the file descriptor refers to an open file, and the structure contains information about its mode (st_mode), 
+size (st_size), and other attributes.
+
+mmap(NULL, 163641, PROT_READ, MAP_PRIVATE, 3, 0): 
+This call maps the contents of the file (referenced by file descriptor 3) into memory.
+The first argument specifies the starting address of the mapped region (NULL means the system chooses an address), 
+the second argument is the size of the mapped region (163641 bytes), 
+the third argument specifies the access protections (read-only), 
+the fourth argument specifies the mapping type (private), 
+the fifth argument specifies the file descriptor, 
+and the last argument specifies the offset into the file where the mapping should start (0).
+
+close(3): This call closes the file descriptor 3.
+
+openat(AT_FDCWD, "/lib/x86_64-linux-gnu/libc.so.6", O_RDONLY|O_CLOEXEC): 
+This call opens a file (libc.so.6) in read-only mode. 
+The AT_FDCWD argument specifies the current working directory, 
+and O_RDONLY|O_CLOEXEC specifies the flags for opening the file (read-only and close-on-exec).
+
+The read() system call is being used to read data from file descriptor 3, which likely represents a file that is being opened. 
+The data being read appears to be in the ELF (Executable and Linkable Format) binary file format, 
+which is used for executable and object code files.
+
+The pread64() system calls are being used to read additional data from the same file. 
+The first argument to pread64() is also the file descriptor, 
+and the subsequent arguments specify the buffer to read data into, the size of the buffer, 
+and the offset within the file to start reading from.
+
+//// it's about read() and pread64() ////////////////////
+Overall, these system calls are likely part of the process of opening and reading from a shared library file, 
+such as a dynamic link library (.so) on a Linux system.
+/////////////////////////////////////////////////////////
+
+mmap(NULL, 2037344, PROT_READ, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0x7f565587f000
+indicates that the process is requesting a new memory mapping with a size of 2037344 bytes (approximately 2 MB), 
+with read-only protection and using the MAP_PRIVATE and MAP_DENYWRITE flags. 
+The memory address assigned to this mapping is 0x7f565587f000.
+
+mmap(0x7f56558a1000, 1540096, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x22000) = 0x7f56558a1000
+indicates that the process is requesting another memory mapping with a size of 1540096 bytes (approximately 1.5 MB), 
+with read and execute protection and using the MAP_PRIVATE, MAP_FIXED, and MAP_DENYWRITE flags. 
+This mapping is fixed at the address 0x7f56558a1000, meaning that the kernel will attempt to create the mapping at 
+that exact address. This could indicate that the mapping is being used to load an executable code segment into memory.
+
+mmap(0x7f5655a19000, 319488, PROT_READ, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x19a000) = 0x7f5655a19000
+indicates that the process is requesting yet another memory mapping with a size of 319488 bytes (approximately 312 KB), 
+with read-only protection and using the MAP_PRIVATE, MAP_FIXED, and MAP_DENYWRITE flags. 
+This mapping is also fixed at a specific address, 0x7f5655a19000, 
+which could indicate that it is being used to load a read-only data segment into memory.
+
+**The MAP_DENYWRITE flag prevents the mapped memory regions from being written to by the process or by any other process, 
+making them read-only. This is a security feature that prevents unauthorized modification of the mapped memory by malware or attackers.
+
+mmap(0x7f5655a67000, 24576, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x1e7000) - 
+This system call maps a region of memory starting at address 0x7f5655a67000 with a size of 24576 bytes (or 24KB) with 
+read and write permissions. The mapping is private and fixed, which means that any changes made to the memory region 
+will not be visible to other processes or the file system. 
+The MAP_DENYWRITE flag indicates that the mapping should be marked as read-only, preventing future write operations on the underlying file. 
+The file descriptor 3 is passed as an argument, indicating that the mapping is associated with a file or device. 
+The return value 0x7f5655a67000 indicates the starting address of the mapped region.
+
+mmap(0x7f5655a6d000, 13920, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) - 
+This system call maps a region of memory starting at address 0x7f5655a6d000 with a size of 13920 bytes (or 13.6KB) 
+with read and write permissions. The mapping is private, fixed, and anonymous, which means that it is not associated 
+with any file or device. The return value 0x7f5655a6d000 indicates the starting address of the mapped region.
+
+close(3) = 0: This closes the file descriptor 3 and returns 0 to indicate that the operation was successful.
+
+arch_prctl(ARCH_SET_FS, 0x7f5655a72540) = 0: 
+This sets the value of the segment base address register FS to the value specified (0x7f5655a72540) and returns 0 to indicate success.
+
+mprotect(0x7f5655a67000, 16384, PROT_READ) = 0: 
+This changes the protection of the memory region starting at address 0x7f5655a67000 to read-only and returns 0 to indicate success.
+
+mprotect(0x5606510c3000, 4096, PROT_READ) = 0: 
+This changes the protection of the memory region starting at address 0x5606510c3000 to read-only and returns 0 to indicate success.
+
+mprotect(0x7f5655ac8000, 4096, PROT_READ) = 0: 
+This changes the protection of the memory region starting at address 0x7f5655ac8000 to read-only and returns 0 to indicate success.
+
+munmap(0x7f5655a73000, 163641) = 0: 
+This unmaps the memory region starting at address 0x7f5655a73000 with a size of 163641 bytes and returns 0 to indicate success.
+
+fstat(1, {st_mode=S_IFCHR|0620, st_rdev=makedev(0x88, 0), ...}) = 0: 
+This retrieves the status of the file descriptor 1 (which typically represents stdout) and returns 0 to indicate success.
+
+brk(NULL) = 0x560651961000: 
+This retrieves the current program break (the end of the process's data segment) and returns its current value.
+
+brk(0x560651982000) = 0x560651982000: 
+This sets the program break to the specified value (0x560651982000) and returns its new value.
+
+write(1, "hello world!!!\n", 15) = 15: This writes the string "hello world!!!\n" to the file descriptor 1 (stdout) 
+and returns the number of bytes written (which is 15 in this case).
+
+exit_group(0) = ?: 
+This terminates the calling process with the exit code 0. 
+The = symbol is typically used to indicate the return value of the system call. However, in this case, the value is not specified, 
+as it may depend on the context of the system call and the specific implementation of the operating system.
+Therefore, the = ? indicates that the return value is unknown or has not been captured in the system call trace.
+
+
+Рассмотрим вот эту командочку поподробнее:
+write(1, "hello world!!!\n", 15);
+целиком читать тут: https://pubs.opengroup.org/onlinepubs/009696699/functions/write.html
+или тут: http://www.c-cpp.ru/content/write-rtlwrite
+
+int write(int handle, void *buf, int count)
+Функция write() переписывает count байт из буфера, на который указывает buf в файл, соот­ветствующий дескриптору файла handle.
+
+--1й аругмент - это file descriptor (FD), 1 означает стандартный вывод
+тут подробнее почитать можно про FD: https://en.wikipedia.org/wiki/File_descriptor
