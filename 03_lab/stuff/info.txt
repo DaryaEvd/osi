@@ -1,0 +1,23 @@
+#for the 2nd task:
+
+-read 'man 2 stat'
+ну просто вот примерчик использования структуры
+
+#include <stdio.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <unistd.h>
+ 
+int main(void) { 
+  struct stat sb;
+  printf("%ld\n", sb.st_size);
+}
+хы.
+
+-read 'man 2 mkdir'
+
+-пункт про вывод содрежимого директории:
+https://stackoverflow.com/questions/49392870/c-programming-directory-name-from-dir-struct
+https://pubs.opengroup.org/onlinepubs/7908799/xsh/dirent.h.html
+
+-пункт про удаление каталога
