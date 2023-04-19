@@ -4,6 +4,11 @@
 #include <string.h>
 #include <sys/types.h>
 
+typedef struct FilePos {
+  char *file;
+  int idx;
+} FilePos;
+
 void printPathToDir(const char *pathToDirName) {
   printf("Path to dir is: ");
   for (int i = 0; i < strlen(pathToDirName); i++) {
@@ -21,11 +26,43 @@ int checkIsDir(const char *name) {
   return 0; // dir doesn't exist
 }
 
+int checkSlashAtTheEnd(const char *pathToDirName) {
+  int hasSlash = 0;
+  if (pathToDirName[strlen(pathToDirName) - 1] == '/') {
+    hasSlash = 1;
+  }
+  printf("has slash at the end: %d\n", hasSlash);
+
+  return hasSlash;
+}
+
+int countSlashesAmount(char *pathToDir) {
+  int countSlashes = 0;
+  for (int i = 0; i < strlen(pathToDir); i++) {
+    if (pathToDir[i] == '/') {
+      countSlashes++;
+    } else {
+      continue;
+    }
+  }
+  printf("count of slashes: %d\n", countSlashes);
+  return countSlashes;
+}
+
+void printNameFile(const char *name, const int lengthName) {
+  for(int i = 0; i < lengthName; i++) {
+    printf("%c", name[i]);
+  }
+  printf("\n");
+}
+
 int main(int argc, char **argv) {
   if (argc != 2) {
     printf("Error! No path of dir entered\n");
     return 0;
   }
+
+  // path should be end with '/' !!!!
 
   char *pathToDir = argv[1];
 
@@ -36,27 +73,15 @@ int main(int argc, char **argv) {
   }
   printf("Entered starting dir is: '%s'\n", pathToDir);
 
-  int countSlashes = 0;
-  int hasSlashAtTheEnd = 0;
-  for (int i = 0; i < strlen(pathToDir); i++) {
-    // printf("help\n");
-    if (pathToDir[i] == '/') {
-      // printf("please\n");
-      countSlashes++;
-    } else {
-      continue;
-    }
-  }
-  printf("count of slashes: %d\n", countSlashes);
+  const int lengthOfPathInSymbols = strlen(pathToDir);
+  printf("length of string in symbols: %d\n", lengthOfPathInSymbols);
 
-  if (pathToDir[strlen(pathToDir) - 1] == '/') {
-    hasSlashAtTheEnd = 1;
-  }
-  printf("has slash at the end: %d\n", hasSlashAtTheEnd);
+  int amountOfSlashes = countSlashesAmount(pathToDir);
+  int hasSlashAtTheEnd = checkSlashAtTheEnd(pathToDir);
 
-  int dirsToReverse =
-      (hasSlashAtTheEnd ? countSlashes - 1 : countSlashes);
-  printf("dirs to reverse : %d\n", dirsToReverse);
+  int amountDirsToReverse =
+      (hasSlashAtTheEnd ? amountOfSlashes - 1 : amountOfSlashes);
+  printf("dirs to reverse : %d\n", amountDirsToReverse);
 
   const int maxDepthOfDirs = 100;
   const int maxLengthOfNameOfFile = 30;
@@ -66,8 +91,23 @@ int main(int argc, char **argv) {
     allDirs[i] = (char *)calloc(maxLengthOfNameOfFile, sizeof(char));
   }
 
+  for (int i = 1; i <= lengthOfPathInSymbols; i++) {
+    int symbolsInOneName = 0;
+    char *name = calloc(maxLengthOfNameOfFile, sizeof(char));
+
+    while (pathToDir[i] != '/') {      
+      name[symbolsInOneName] = pathToDir[i];
+      i++;
+      symbolsInOneName++;
+      
+    }
+    printf("iteration %d : symbols in name: %d\n", i, symbolsInOneName);
+    printNameFile(name, symbolsInOneName);
+  }
+
   for (int i = 0; i < maxDepthOfDirs; i++) {
     free(allDirs[i]);
   }
   free(allDirs);
 }
+
