@@ -1,1 +1,0 @@
-/home/dasha/masec/osi/labs/03_lab/code/task2/a_create_dir.c
