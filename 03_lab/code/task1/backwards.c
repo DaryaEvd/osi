@@ -1,29 +1,34 @@
 #include <dirent.h>
+#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/stat.h>
 #include <sys/types.h>
 
-typedef struct FilePos {
-  char *file;
-  int idx;
-} FilePos;
-
 void printPathToDir(const char *pathToDirName) {
-  printf("Path to dir is: ");
+  printf("Path to entry is: ");
   for (int i = 0; i < strlen(pathToDirName); i++) {
     printf("%c ", pathToDirName[i]);
   }
   printf("\n");
 }
 
-int checkIsDir(const char *name) {
-  DIR *dir = opendir(name);
-  if (dir != NULL) {
-    closedir(dir);
-    return 1; // dir is a real dir
+void printNameFile(const char *name, const int lengthName) {
+  for (int i = 0; i < lengthName; i++) {
+    printf("%c", name[i]);
   }
-  return 0; // dir doesn't exist
+  printf("\n");
+}
+
+int checkIsDir(const char *name) {
+  DIR *entry = opendir(name);
+  if (entry != NULL) {
+    closedir(entry);
+    return 1; // entry is a real entry
+  }
+  // closedir(entry);
+  return 0; // entry doesn't exist
 }
 
 int checkSlashAtTheEnd(const char *pathToDirName) {
@@ -49,20 +54,21 @@ int countSlashesAmount(char *pathToDir) {
   return countSlashes;
 }
 
-void printNameFile(const char *name, const int lengthName) {
-  for(int i = 0; i < lengthName; i++) {
-    printf("%c", name[i]);
-  }
-  printf("\n");
+void concatStrings(char *pathToReversedDir, char *pathBeforeLastDir,
+                   char *lastNameDir) {
+  strcat(pathToReversedDir, pathBeforeLastDir);
+  strcat(pathToReversedDir, lastNameDir);
 }
 
 int main(int argc, char **argv) {
   if (argc != 2) {
-    printf("Error! No path of dir entered\n");
+    printf("Error! No path of entry entered\n");
     return 0;
   }
 
   // path should be end with '/' !!!!
+
+  const int bufferSize = 4096;
 
   char *pathToDir = argv[1];
 
@@ -71,43 +77,83 @@ int main(int argc, char **argv) {
            pathToDir);
     return 0;
   }
-  printf("Entered starting dir is: '%s'\n", pathToDir);
+  printf("Entered starting entry is: '%s'\n", pathToDir);
 
-  const int lengthOfPathInSymbols = strlen(pathToDir);
-  printf("length of string in symbols: %d\n", lengthOfPathInSymbols);
+  const int lengthOfPathInSymbols =
+      strlen(pathToDir) - 1; // minus null term
+  // printf("length of string in symbols: %d\n",
+  // lengthOfPathInSymbols);
 
   int amountOfSlashes = countSlashesAmount(pathToDir);
   int hasSlashAtTheEnd = checkSlashAtTheEnd(pathToDir);
 
-  int amountDirsToReverse =
-      (hasSlashAtTheEnd ? amountOfSlashes - 1 : amountOfSlashes);
-  printf("dirs to reverse : %d\n", amountDirsToReverse);
+  char *lastNameDir = calloc(8, sizeof(char));
+  int symbolsInLastDir = 0;
 
-  const int maxDepthOfDirs = 100;
-  const int maxLengthOfNameOfFile = 30;
-
-  char **allDirs = (char **)calloc(maxDepthOfDirs, sizeof(char *));
-  for (int i = 0; i < maxLengthOfNameOfFile; i++) {
-    allDirs[i] = (char *)calloc(maxLengthOfNameOfFile, sizeof(char));
-  }
-
-  for (int i = 1; i <= lengthOfPathInSymbols; i++) {
-    int symbolsInOneName = 0;
-    char *name = calloc(maxLengthOfNameOfFile, sizeof(char));
-
-    while (pathToDir[i] != '/') {      
-      name[symbolsInOneName] = pathToDir[i];
-      i++;
-      symbolsInOneName++;
-      
+  for (int i = lengthOfPathInSymbols - 1; i > 0; i--) {
+    while (pathToDir[i] != '/') {
+      lastNameDir[symbolsInLastDir] = pathToDir[i];
+      i--;
+      symbolsInLastDir++;
     }
-    printf("iteration %d : symbols in name: %d\n", i, symbolsInOneName);
-    printNameFile(name, symbolsInOneName);
+    break;
+  }
+  // printf("symbols in last entry: %d\n", symbolsInLastDir);
+
+  // 23, 16
+  // printNameFile(lastNameDir, symbolsInLastDir);
+
+  const int lengthPathBeforeLastDir =
+      lengthOfPathInSymbols - symbolsInLastDir;
+
+  char *pathBeforeLastDir = (char *)calloc(
+      lengthPathBeforeLastDir, sizeof(char)); // maybe + 1 - хз пока
+
+  for (int i = 0; i < lengthPathBeforeLastDir; i++) {
+    pathBeforeLastDir[i] = pathToDir[i];
   }
 
-  for (int i = 0; i < maxDepthOfDirs; i++) {
-    free(allDirs[i]);
+  // printPathToDir(pathBeforeLastDir);
+
+  char *pathToReversedDir =
+      calloc(lengthOfPathInSymbols, sizeof(char));
+
+  concatStrings(pathToReversedDir, pathBeforeLastDir, lastNameDir);
+
+  printPathToDir(pathToReversedDir);
+
+  struct stat st = {0};
+  if (stat(pathToReversedDir, &st) == -1) {
+    mkdir(pathToReversedDir, S_IRWXU | S_IRWXO);
   }
-  free(allDirs);
+
+  DIR *d;
+  struct dirent *entry;
+  d = opendir(pathToDir);
+  if (d) {
+    while ((entry = readdir(d)) != NULL) {
+
+      if (entry->d_type == DT_REG) {
+        printf("%s\n", entry->d_name);
+
+        FILE *fileToCopy = fopen(entry->d_name, "r");
+        if(fileToCopy  == NULL) {
+          // printf("Error! I can't open file! \n");
+          // perror("Error\n");
+          printf("Error: %d (%s)\n", errno, strerror(errno));
+        }
+
+        if (fileToCopy) {
+          printf("\n Now reading %s file...", entry->d_name);
+          // char strDestFileName[bufferSize];
+        }
+      }
+    }
+    closedir(d);
+  }
+
+  free(pathBeforeLastDir);
+  free(pathToReversedDir);
+  free(lastNameDir);
 }
 
