@@ -1,5 +1,6 @@
 #include <dirent.h>
 #include <errno.h>
+#include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -15,6 +16,7 @@ void printPathToDir(const char *pathToDirName) {
 }
 
 void printNameFile(const char *name, const int lengthName) {
+  printf("reversed name is: ");
   for (int i = 0; i < lengthName; i++) {
     printf("%c", name[i]);
   }
@@ -36,7 +38,7 @@ int checkSlashAtTheEnd(const char *pathToDirName) {
   if (pathToDirName[strlen(pathToDirName) - 1] == '/') {
     hasSlash = 1;
   }
-  printf("has slash at the end: %d\n", hasSlash);
+  // printf("has slash at the end: %d\n", hasSlash);
 
   return hasSlash;
 }
@@ -50,7 +52,7 @@ int countSlashesAmount(char *pathToDir) {
       continue;
     }
   }
-  printf("count of slashes: %d\n", countSlashes);
+  // printf("count of slashes: %d\n", countSlashes);
   return countSlashes;
 }
 
@@ -58,6 +60,16 @@ void concatStrings(char *pathToReversedDir, char *pathBeforeLastDir,
                    char *lastNameDir) {
   strcat(pathToReversedDir, pathBeforeLastDir);
   strcat(pathToReversedDir, lastNameDir);
+  // strcat(pathToReversedDir, "/");
+}
+
+void reverseNameFile(char *dst, char *src) {
+  int idx = 0;
+  for (int i = strlen(src) - 1; i >= 0; i--) {
+    dst[idx] = src[i];
+    // printf("iter %d : sym is %c\n", i, dst[idx]);
+    idx++;
+  }
 }
 
 int main(int argc, char **argv) {
@@ -120,6 +132,7 @@ int main(int argc, char **argv) {
 
   concatStrings(pathToReversedDir, pathBeforeLastDir, lastNameDir);
 
+  printf("pathToReversedDir: ");
   printPathToDir(pathToReversedDir);
 
   struct stat st = {0};
@@ -134,18 +147,44 @@ int main(int argc, char **argv) {
     while ((entry = readdir(d)) != NULL) {
 
       if (entry->d_type == DT_REG) {
-        printf("%s\n", entry->d_name);
+        printf("entry name is: %s\n", entry->d_name);
 
-        FILE *fileToCopy = fopen(entry->d_name, "r");
-        if(fileToCopy  == NULL) {
-          // printf("Error! I can't open file! \n");
-          // perror("Error\n");
+        char *nameRegFile = (char *)calloc(bufferSize, sizeof(char));
+        concatStrings(nameRegFile, pathToDir, entry->d_name);
+        printPathToDir(nameRegFile);
+
+        FILE *fileToCopy = fopen(nameRegFile, "r");
+        if (fileToCopy == NULL) {
           printf("Error: %d (%s)\n", errno, strerror(errno));
         }
 
-        if (fileToCopy) {
-          printf("\n Now reading %s file...", entry->d_name);
-          // char strDestFileName[bufferSize];
+        else {
+          printf("Now reading file: %s\n", entry->d_name);
+          const int lengthEntryName = strlen(entry->d_name);
+          char reversedName[lengthEntryName];
+          reverseNameFile(reversedName, entry->d_name);
+          printNameFile(reversedName, lengthEntryName);
+
+          char *pathWithReversedName =
+              (char *)calloc(bufferSize, sizeof(char));
+
+          strcat(pathWithReversedName, pathToReversedDir);
+          strcat(pathWithReversedName, "/");
+          strcat(pathWithReversedName, reversedName);
+
+          printPathToDir(pathWithReversedName);
+
+          FILE *output = fopen(pathWithReversedName, "w");
+          if (output == NULL) {
+            printf("Error: %d (%s)\n", errno, strerror(errno));
+
+          } else {
+            char buffer[bufferSize];
+            while (fgets(buffer, bufferSize, fileToCopy)) {
+              fputs(buffer, output);
+            }
+            fclose(output);
+          }
         }
       }
     }
