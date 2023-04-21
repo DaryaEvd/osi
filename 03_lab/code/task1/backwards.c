@@ -46,6 +46,16 @@ void  concatStrings(char *pathToReversedDir, char *pathBeforeLastDir, char *last
   strcat(pathToReversedDir, lastNameDir);
 }
 
+void reverFileName(char *str) {
+  size_t len = strlen(str);
+  char temp;
+  for (size_t i = 0; i < len / 2; i++) {
+    temp = str[i];
+    str[i] = str[len - i - 1];
+    str[len - i - 1] = temp;
+  } 
+}
+
 int main(int argc, char **argv) {
   if (argc != 2) {
     printf("Error! No path of entry entered\n");
@@ -140,29 +150,34 @@ int main(int argc, char **argv) {
         strcat(nameRegFile, entry->d_name);
         printPathToDir(nameRegFile);
 
-
         FILE *fileToCopy = fopen(nameRegFile, "r");
         if (fileToCopy == NULL) {
          printf("Error: %d (%s)\n", errno, strerror(errno));
          }
 
-        /*
         else {
           printf("Now reading file: %s\n", entry->d_name);
           const int lengthEntryName = strlen(entry->d_name);
-          char reversedName[lengthEntryName];
+          //char reversedName[lengthEntryName];
+          char *reversedName = calloc(lengthEntryName + 1, sizeof(char));
+
           reverseNameFile(reversedName, entry->d_name);
+
+          reverFileName(entry->d_name);
           printNameFile(reversedName, lengthEntryName);
 
-          char *pathWithReversedName =
-              (char *)calloc(bufferSize, sizeof(char));
+          char pathWithReversedName[strlen(pathToDir)];
 
           strcat(pathWithReversedName, pathToReversedDir);
-          strcat(pathWithReversedName, "/");
+          //strcat(pathWithReversedName, "/");
           strcat(pathWithReversedName, reversedName);
 
           printPathToDir(pathWithReversedName);
 
+          printf("path with rev name length: %ld\n", strlen(pathWithReversedName));
+          printf("path to rev dir length: %ld\n", strlen(pathToReversedDir));
+          printf("rev dir name length: %ld\n", strlen(reversedName));
+/*
           FILE *output = fopen(pathWithReversedName, "w");
           if (output == NULL) {
             printf("Error: %d (%s)\n", errno, strerror(errno));
@@ -173,9 +188,11 @@ int main(int argc, char **argv) {
               fputs(buffer, output);
             }
             fclose(output);
+ 
           }
-        }
  */
+        }
+// */
      }
     }
     closedir(d);
