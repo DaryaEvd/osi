@@ -127,21 +127,26 @@ int main(int argc, char **argv) {
       if (entry->d_type == DT_REG) {
         printf("entry name is: %s\n", entry->d_name);
 
-        char *nameRegFile = (char *)calloc(bufferSize, sizeof(char));
+        int lengthRegFile = strlen(entry->d_name);
+
+        char *nameRegFile = (char *)calloc(lengthOfPathInSymbols + 1 + lengthRegFile , sizeof(char));
         
-        strcat(nameRegFile, pathBeforeLastDir);
-        strcat(nameRegFile, lastNameDir);
+       // strcat(nameRegFile, pathBeforeLastDir);
+      // strcat(nameRegFile, lastNameDir);
+     //   strcat(nameRegFile, entry->d_name);
+
+        strcat(nameRegFile, pathToDir);
+        strcat(nameRegFile, "/");
         strcat(nameRegFile, entry->d_name);
-        
-        //concatStrings(nameRegFile, pathToDir, entry->d_name);
         printPathToDir(nameRegFile);
 
-        /*
+
         FILE *fileToCopy = fopen(nameRegFile, "r");
         if (fileToCopy == NULL) {
-          printf("Error: %d (%s)\n", errno, strerror(errno));
-        }
+         printf("Error: %d (%s)\n", errno, strerror(errno));
+         }
 
+        /*
         else {
           printf("Now reading file: %s\n", entry->d_name);
           const int lengthEntryName = strlen(entry->d_name);
