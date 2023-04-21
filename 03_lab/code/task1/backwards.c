@@ -41,6 +41,10 @@ void reverseNameFile(char *dst, char *src) {
     idx++;
   }
 }
+void  concatStrings(char *pathToReversedDir, char *pathBeforeLastDir, char *lastNameDir) {
+  strcat(pathToReversedDir, pathBeforeLastDir);
+  strcat(pathToReversedDir, lastNameDir);
+}
 
 int main(int argc, char **argv) {
   if (argc != 2) {
@@ -48,7 +52,7 @@ int main(int argc, char **argv) {
     return 0;
   }
 
-  // const int bufferSize = 4096;
+  const int bufferSize = 1;
 
   char *pathToDir = argv[1];
 
@@ -102,9 +106,9 @@ int main(int argc, char **argv) {
   char *pathToReversedDir =
       calloc(lengthOfPathInSymbols, sizeof(char));
 
-//  concatStrings(pathToReversedDir, pathBeforeLastDir, lastNameDir);
-  strcat(pathToReversedDir, pathBeforeLastDir);
- strcat(pathToReversedDir, lastNameDir); 
+  concatStrings(pathToReversedDir, pathBeforeLastDir, lastNameDir);
+ // strcat(pathToReversedDir, pathBeforeLastDir);
+// strcat(pathToReversedDir, lastNameDir); 
 
   printf("pathToReversedDir: ");
   printPathToDir(pathToReversedDir);
@@ -114,7 +118,6 @@ int main(int argc, char **argv) {
     mkdir(pathToReversedDir, S_IRWXU | S_IRWXO);
   }
 
-/*
   DIR *d;
   struct dirent *entry;
   d = opendir(pathToDir);
@@ -125,9 +128,15 @@ int main(int argc, char **argv) {
         printf("entry name is: %s\n", entry->d_name);
 
         char *nameRegFile = (char *)calloc(bufferSize, sizeof(char));
-        concatStrings(nameRegFile, pathToDir, entry->d_name);
+        
+        strcat(nameRegFile, pathBeforeLastDir);
+        strcat(nameRegFile, lastNameDir);
+        strcat(nameRegFile, entry->d_name);
+        
+        //concatStrings(nameRegFile, pathToDir, entry->d_name);
         printPathToDir(nameRegFile);
 
+        /*
         FILE *fileToCopy = fopen(nameRegFile, "r");
         if (fileToCopy == NULL) {
           printf("Error: %d (%s)\n", errno, strerror(errno));
@@ -161,7 +170,8 @@ int main(int argc, char **argv) {
             fclose(output);
           }
         }
-      }
+ */
+     }
     }
     closedir(d);
   }
@@ -169,6 +179,5 @@ int main(int argc, char **argv) {
   free(pathBeforeLastDir);
   free(pathToReversedDir);
   free(lastNameDir);
-*/
 }
 
