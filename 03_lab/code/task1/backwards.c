@@ -41,19 +41,10 @@ void reverseNameFile(char *dst, char *src) {
     idx++;
   }
 }
-void  concatStrings(char *pathToReversedDir, char *pathBeforeLastDir, char *lastNameDir) {
+void concatStrings(char *pathToReversedDir, char *pathBeforeLastDir,
+                   char *lastNameDir) {
   strcat(pathToReversedDir, pathBeforeLastDir);
   strcat(pathToReversedDir, lastNameDir);
-}
-
-void reverFileName(char *str) {
-  size_t len = strlen(str);
-  char temp;
-  for (size_t i = 0; i < len / 2; i++) {
-    temp = str[i];
-    str[i] = str[len - i - 1];
-    str[len - i - 1] = temp;
-  } 
 }
 
 int main(int argc, char **argv) {
@@ -73,18 +64,15 @@ int main(int argc, char **argv) {
   }
   printf("Entered starting entry is: '%s'\n", pathToDir);
 
-  const int lengthOfPathInSymbols =
-      strlen(pathToDir); 
-  // printf("length of string in symbols: %d\n",
-  // lengthOfPathInSymbols);
+  const int lengthOfPathInSymbols = strlen(pathToDir);
+  printf("length of string in symbols: %d\n", lengthOfPathInSymbols);
 
-
-//  char *lastNameDir = calloc(8, sizeof(char));
+  //  char *lastNameDir = calloc(8, sizeof(char));
   int symbolsInLastDir = 0;
 
   for (int i = lengthOfPathInSymbols - 1; i > 0; i--) {
     while (pathToDir[i] != '/') {
- //     lastNameDir[symbolsInLastDir] = pathToDir[i];
+      //     lastNameDir[symbolsInLastDir] = pathToDir[i];
       i--;
       symbolsInLastDir++;
     }
@@ -93,13 +81,13 @@ int main(int argc, char **argv) {
   // printf("symbols in last entry: %d\n", symbolsInLastDir);
 
   char *lastNameDir = calloc(symbolsInLastDir + 1, sizeof(char));
-  printf("%c", pathToDir[lengthOfPathInSymbols ]);
-  for(int i = 0; i < symbolsInLastDir + 1; i++) {
+  printf("%c", pathToDir[lengthOfPathInSymbols]);
+  for (int i = 0; i < symbolsInLastDir + 1; i++) {
     lastNameDir[i] = pathToDir[lengthOfPathInSymbols - i - 1];
   }
 
   // 23, 16
-   printNameFile(lastNameDir, symbolsInLastDir);
+  printNameFile(lastNameDir, symbolsInLastDir);
 
   const int lengthPathBeforeLastDir =
       lengthOfPathInSymbols - symbolsInLastDir;
@@ -113,20 +101,22 @@ int main(int argc, char **argv) {
 
   // printPathToDir(pathBeforeLastDir);
 
-  char *pathToReversedDir =
-      calloc(lengthOfPathInSymbols, sizeof(char));
+  char *pathToReversedDir = calloc(lengthOfPathInSymbols,
+                                   sizeof(char)); // changed heere
 
   concatStrings(pathToReversedDir, pathBeforeLastDir, lastNameDir);
- // strcat(pathToReversedDir, pathBeforeLastDir);
-// strcat(pathToReversedDir, lastNameDir); 
+  // strcat(pathToReversedDir, pathBeforeLastDir);
+  // strcat(pathToReversedDir, lastNameDir);
 
   printf("pathToReversedDir: ");
   printPathToDir(pathToReversedDir);
 
+  /*
   struct stat st = {0};
   if (stat(pathToReversedDir, &st) == -1) {
     mkdir(pathToReversedDir, S_IRWXU | S_IRWXO);
   }
+  */
 
   DIR *d;
   struct dirent *entry;
@@ -135,65 +125,27 @@ int main(int argc, char **argv) {
     while ((entry = readdir(d)) != NULL) {
 
       if (entry->d_type == DT_REG) {
-        printf("entry name is: %s\n", entry->d_name);
-
-        int lengthRegFile = strlen(entry->d_name);
-
-        char *nameRegFile = (char *)calloc(lengthOfPathInSymbols + 1 + lengthRegFile , sizeof(char));
         
-       // strcat(nameRegFile, pathBeforeLastDir);
-      // strcat(nameRegFile, lastNameDir);
-     //   strcat(nameRegFile, entry->d_name);
+        char *pathWithReversedName =
+            calloc(bufferSize,
+                   sizeof(char));
+        //printPathToDir(pathToReversedDir);
 
-        strcat(nameRegFile, pathToDir);
-        strcat(nameRegFile, "/");
-        strcat(nameRegFile, entry->d_name);
-        printPathToDir(nameRegFile);
-
-        FILE *fileToCopy = fopen(nameRegFile, "r");
-        if (fileToCopy == NULL) {
-         printf("Error: %d (%s)\n", errno, strerror(errno));
-         }
-
-        else {
-          printf("Now reading file: %s\n", entry->d_name);
-          const int lengthEntryName = strlen(entry->d_name);
-          //char reversedName[lengthEntryName];
-          char *reversedName = calloc(lengthEntryName + 1, sizeof(char));
-
-          reverseNameFile(reversedName, entry->d_name);
-
-          reverFileName(entry->d_name);
-          printNameFile(reversedName, lengthEntryName);
-
-          char pathWithReversedName[strlen(pathToDir)];
-
-          strcat(pathWithReversedName, pathToReversedDir);
-          //strcat(pathWithReversedName, "/");
-          strcat(pathWithReversedName, reversedName);
-
-          printPathToDir(pathWithReversedName);
-
-          printf("path with rev name length: %ld\n", strlen(pathWithReversedName));
-          printf("path to rev dir length: %ld\n", strlen(pathToReversedDir));
-          printf("rev dir name length: %ld\n", strlen(reversedName));
-/*
-          FILE *output = fopen(pathWithReversedName, "w");
-          if (output == NULL) {
-            printf("Error: %d (%s)\n", errno, strerror(errno));
-
-          } else {
-            char buffer[bufferSize];
-            while (fgets(buffer, bufferSize, fileToCopy)) {
-              fputs(buffer, output);
-            }
-            fclose(output);
- 
-          }
- */
+        for(int i = 0; i < lengthOfPathInSymbols; i++) {
+          pathWithReversedName[i] = pathToReversedDir[i];
         }
-// */
-     }
+        printPathToDir(pathWithReversedName);   
+        //
+        for(int i = strlen(pathToReversedDir); i < lengthOfPathInSymbols + strlen(pathToReversedDir); i++) {
+          pathWithReversedName[i] = pathToReversedDir[i]; 
+        }
+
+//        strcat(pathWithReversedName, pathToReversedDir);
+   //     strcat(pathWithReversedName, "/");
+     //   strcat(pathWithReversedName, entry->d_name);
+
+       printPathToDir(pathWithReversedName);
+      }
     }
     closedir(d);
   }
