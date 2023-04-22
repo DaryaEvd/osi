@@ -47,9 +47,6 @@ int main(int argc, char **argv) {
   int lengthStartDir = countStringLength(startDirPath);
 
   char *endDirPath = calloc(lengthStartDir + 1 + 1, sizeof(char));
-  if (!endDirPath) {
-    return 0;
-  }
 
   printf("strlen start path: %ld\n", strlen(startDirPath));
   printf("length start dir: %d\n", lengthStartDir);
@@ -65,24 +62,15 @@ int main(int argc, char **argv) {
   printf("amountSymbLastDir: %d\n", amountSymbLastDir);
 
   char *beforeLastDir =
-      calloc(lengthStartDir - amountSymbLastDir + 1, sizeof(char));
-  if (!beforeLastDir) {
-    free(endDirPath);
-    return 0;
-  }
+      calloc(lengthStartDir - amountSymbLastDir + 1 + 1, sizeof(char));
   int lengthBeforeLastDir = countStringLength(beforeLastDir);
   memcpy(beforeLastDir, startDirPath,
          lengthStartDir - amountSymbLastDir);
-  // printf("before last dir: ");
+  printf("before last dir: ");
   // printDirPath(beforeLastDir, lengthStartDir);
 
   char *nameReversedLastDir =
-      calloc(amountSymbLastDir + 1, sizeof(char));
-  if (!nameReversedLastDir) {
-    free(endDirPath);
-    free(beforeLastDir);
-    return 0;
-  }
+      calloc(amountSymbLastDir + 1 + 1, sizeof(char));
   for (int i = 0; i < amountSymbLastDir; i++) {
     nameReversedLastDir[i] = startDirPath[lengthStartDir - i - 1];
     printf("iter %d, symb: %s\n", i, &nameReversedLastDir[i]);
@@ -115,24 +103,15 @@ int main(int argc, char **argv) {
 
         int lengthRegFileCurr = countStringLength(entry->d_name);
 
-        char *inputFilePath = calloc(
-            1 + 1 + lengthStartDir + lengthRegFileCurr, sizeof(char));
-        if (!inputFilePath) {
-          free(beforeLastDir);
-          free(nameReversedLastDir);
-          free(endDirPath);
-        }
+        char *inputFilePath = calloc(1 + 
+            1 + lengthStartDir + lengthRegFileCurr, sizeof(char));
+
         // strcat(inputFilePath, endDirPath);
         // strcat(inputFilePath, "/");
 
         char *reversedFileNameCurr =
-            calloc(lengthRegFileCurr + 1, sizeof(char));
-        if (!reversedFileNameCurr) {
-          free(inputFilePath);
-          free(beforeLastDir);
-          free(nameReversedLastDir);
-          free(endDirPath);
-        }
+            calloc(lengthRegFileCurr + 1 + 1, sizeof(char));
+
         for (int i = 0; i < lengthRegFileCurr; i++) {
           reversedFileNameCurr[i] =
               entry->d_name[lengthRegFileCurr - i - 1];
@@ -149,15 +128,9 @@ int main(int argc, char **argv) {
         printDirPath(inputFilePath,
                      1 + lengthStartDir + lengthRegFileCurr);
 
-        char *outputFilePath = calloc(
-            lengthStartDir + lengthRegFileCurr + 1 + 1, sizeof(char));
-        if (!outputFilePath) {
-          free(reversedFileNameCurr);
-          free(inputFilePath);
-          free(beforeLastDir);
-          free(nameReversedLastDir);
-          free(endDirPath);
-        }
+        char *outputFilePath =
+            calloc(lengthStartDir + lengthRegFileCurr + 1 + 1, sizeof(char));
+
         strcat(outputFilePath, endDirPath);
         strcat(outputFilePath, reversedFileNameCurr);
 
