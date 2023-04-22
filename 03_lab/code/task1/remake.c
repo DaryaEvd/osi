@@ -73,7 +73,7 @@ int main(int argc, char **argv) {
       calloc(amountSymbLastDir + 1, sizeof(char));
   for (int i = 0; i < amountSymbLastDir; i++) {
     nameReversedLastDir[i] = startDirPath[lengthStartDir - i - 1];
-   printf("iter %d, symb: %s\n", i, &nameReversedLastDir[i]);
+    printf("iter %d, symb: %s\n", i, &nameReversedLastDir[i]);
   }
 
   // char *reversedLastDir = calloc()
@@ -83,7 +83,6 @@ int main(int argc, char **argv) {
   printf("path for reversed dir: ");
   printDirPath(endDirPath, lengthStartDir);
 
-  
   struct stat st = {0};
   if (stat(endDirPath, &st) == -1) {
     mkdir(endDirPath, S_IRWXU | S_IRWXO);
@@ -96,6 +95,11 @@ int main(int argc, char **argv) {
     while ((entry = readdir(d)) != NULL) {
 
       if (entry->d_type == DT_REG) {
+        printf("curr file name is: ");
+        for (int i = 0; i < strlen(entry->d_name); i++) {
+          printf("%c", entry->d_name[i]);
+        }
+        printf("\n");
 
         int lengthRegFileCurr = countStringLength(entry->d_name);
 
@@ -111,8 +115,7 @@ int main(int argc, char **argv) {
         for (int i = 0; i < lengthRegFileCurr; i++) {
           reversedFileNameCurr[i] =
               entry->d_name[lengthRegFileCurr - i - 1];
-          // printf("iter %d, symb: %s\n", i,
-          // &reversedFileNameCurr[i]);
+          printf("iter %d, symb: %s\n", i, &reversedFileNameCurr[i]);
         }
 
         // strcat(inputFilePath, entry->d_name);
@@ -126,41 +129,51 @@ int main(int argc, char **argv) {
                      1 + lengthStartDir + lengthRegFileCurr);
 
         char *outputFilePath =
-            calloc(lengthRegFileCurr + 1, sizeof(char));
+            calloc(lengthStartDir + lengthRegFileCurr + 1, sizeof(char));
 
         strcat(outputFilePath, endDirPath);
         strcat(outputFilePath, reversedFileNameCurr);
 
         printf("path for output file: ");
-       printDirPath(outputFilePath,
-                    1 + lengthStartDir + lengthRegFileCurr);
+        printDirPath(outputFilePath,
+                     1 + lengthStartDir + lengthRegFileCurr);
 
         FILE *input = fopen(inputFilePath, "r");
-        if(!input) {
-          printf("can't open file: ");
-        }
- 
-    
-        FILE *output = fopen(outputFilePath, "w");
         if (input == NULL) {
-          printf("can't open file: ");
-          printDirPath(inputFilePath, 1 + lengthStartDir + lengthRegFileCurr);
+          printf("can't open input file: ");
+          printDirPath(inputFilePath,
+                       1 + lengthStartDir + lengthRegFileCurr);
+          free(beforeLastDir);
+          free(nameReversedLastDir);
+          free(endDirPath);
+          free(reversedFileNameCurr);
+          free(outputFilePath);
           return 0;
         }
-        if(output == NULL) {
-          printf("can't open file: ");
-          printDirPath(outputFilePath, 1 + lengthStartDir + lengthRegFileCurr);
+
+        FILE *output = fopen(outputFilePath, "w");
+        if (output == NULL) {
+          printf("can't open output file: ");
+          printDirPath(outputFilePath,
+                       1 + lengthStartDir + lengthRegFileCurr);
+          free(beforeLastDir);
+          free(nameReversedLastDir);
+          free(endDirPath);
+          free(reversedFileNameCurr);
+          free(outputFilePath);
           return 0;
-        } 
-    
+        }
+
         printf("reading file ... \n");
+        printDirPath(inputFilePath,
+                     1 + lengthStartDir + lengthRegFileCurr);
 
         fseek(input, 0L, SEEK_END);
 
         int sizeFile = ftell(input) - 1;
         printf("size file is: %d\n", sizeFile);
- 
-        while(sizeFile >= 0L) {
+
+        while (sizeFile >= 0L) {
           fseek(input, sizeFile, SEEK_SET);
           char symb = fgetc(input);
           printf("symb is: %c\n", symb);
@@ -171,15 +184,13 @@ int main(int argc, char **argv) {
         fclose(input);
         fclose(output);
 
-
         free(inputFilePath);
         free(reversedFileNameCurr);
         free(outputFilePath);
       }
     }
-    closedir(d);
   }
-  
+  closedir(d);
   free(beforeLastDir);
   free(nameReversedLastDir);
   free(endDirPath);
