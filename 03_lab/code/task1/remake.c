@@ -112,12 +112,18 @@ int main(int argc, char **argv) {
         //strcat(inputFilePath, entry->d_name);
         
         strcat(inputFilePath, endDirPath);
-        strcat(inputFilePath, reversedFileNameCurr);
+        strcat(inputFilePath, entry->d_name);
 
-        
+        printf("path for input file: ");
         printDirPath(inputFilePath, 1 + lengthStartDir + lengthRegFileCurr);
 
-
+        char *outputFilePath = calloc(lengthRegFileCurr + 1, sizeof(char));
+        
+        strcat(outputFilePath, endDirPath);
+        strcat(outputFilePath, reversedFileNameCurr);
+        
+        printf("path for output file: ");
+        printDirPath(outputFilePath, 1 + lengthStartDir + lengthRegFileCurr);
         
       }
     }
