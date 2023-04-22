@@ -154,14 +154,18 @@ int main(int argc, char **argv) {
         } 
     
         printf("reading file ... \n");
-        fseek(input, 0, SEEK_END);
-        int sizeFile = ftell(input);
-        int idx = 0;
-        while(idx < sizeFile) {
-          fseek(input, -idx, SEEK_END);
+
+        fseek(input, 0L, SEEK_END);
+
+        int sizeFile = ftell(input) - 1;
+        printf("size file is: %d\n", sizeFile);
+ 
+        while(sizeFile >= 0L) {
+          fseek(input, sizeFile, SEEK_SET);
           char symb = fgetc(input);
-          fprintf(output, "%c", symb);
-          idx++;
+          printf("symb is: %c\n", symb);
+          fputc(symb, output);
+          sizeFile--;
         }
 
         fclose(input);
