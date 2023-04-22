@@ -93,10 +93,20 @@ int main(int argc, char **argv) {
 
         strcat(inputFilePath, endDirPath);
         strcat(inputFilePath, "/");
-        strcat(inputFilePath, entry->d_name);
+
+        char *reversedFileNameCurr = calloc(lengthRegFileCurr + 1, sizeof(char));
+
+        for(int i = 0; i < lengthRegFileCurr; i++) {
+          reversedFileNameCurr[i] = entry->d_name[lengthRegFileCurr - i - 1];
+          printf("iter %d, symb: %s\n", i, &reversedFileNameCurr[i]);
+        }
+
+
+        //strcat(inputFilePath, entry->d_name);
+
+        strcat(inputFilePath, reversedFileNameCurr);
 
         printDirPath(inputFilePath, 1 + lengthStartDir + lengthRegFileCurr);
-
 
       }
     }
