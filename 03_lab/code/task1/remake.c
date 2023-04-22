@@ -70,11 +70,14 @@ int main(int argc, char **argv) {
   char *nameReversedLastDir = calloc(amountSymbLastDir + 1, sizeof(char));
   for(int i = 0; i < amountSymbLastDir; i++) {
     nameReversedLastDir[i] = startDirPath[lengthStartDir - i - 1];
-    //printf("iter %d, symb: %s\n", i, &nameReversedLastDir[i]);    
+    printf("iter %d, symb: %s\n", i, &nameReversedLastDir[i]);    
   }
 
   // char *reversedLastDir = calloc()
+  strcat(endDirPath, beforeLastDir);
   strcat(endDirPath, nameReversedLastDir);
+  strcat(endDirPath, "/");
+  printf("path for reversed dir: ");
   printDirPath(endDirPath, lengthStartDir);
 
   struct stat st = {0};
@@ -107,9 +110,11 @@ int main(int argc, char **argv) {
 
 
         //strcat(inputFilePath, entry->d_name);
-
+        
+        strcat(inputFilePath, endDirPath);
         strcat(inputFilePath, reversedFileNameCurr);
 
+        
         printDirPath(inputFilePath, 1 + lengthStartDir + lengthRegFileCurr);
 
 
