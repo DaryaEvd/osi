@@ -61,8 +61,11 @@ int main(int argc, char **argv) {
   }
   printf("amountSymbLastDir: %d\n", amountSymbLastDir);
 
-  memcpy(endDirPath, startDirPath, lengthStartDir - amountSymbLastDir);
-  printDirPath(endDirPath, lengthStartDir);
+  char *beforeLastDir = calloc(lengthStartDir - amountSymbLastDir + 1, sizeof(char));
+  int lengthBeforeLastDir = countStringLength(beforeLastDir);
+  memcpy(beforeLastDir, startDirPath, lengthStartDir - amountSymbLastDir);
+  printf("before last dir: ");
+  printDirPath(beforeLastDir, lengthStartDir);
 
   char *nameReversedLastDir = calloc(amountSymbLastDir + 1, sizeof(char));
   for(int i = 0; i < amountSymbLastDir; i++) {
@@ -91,14 +94,15 @@ int main(int argc, char **argv) {
 
         char *inputFilePath = calloc(1 +lengthStartDir + lengthRegFileCurr, sizeof(char));
 
-        strcat(inputFilePath, endDirPath);
-        strcat(inputFilePath, "/");
+
+        //strcat(inputFilePath, endDirPath);
+        //strcat(inputFilePath, "/");
 
         char *reversedFileNameCurr = calloc(lengthRegFileCurr + 1, sizeof(char));
 
         for(int i = 0; i < lengthRegFileCurr; i++) {
           reversedFileNameCurr[i] = entry->d_name[lengthRegFileCurr - i - 1];
-          printf("iter %d, symb: %s\n", i, &reversedFileNameCurr[i]);
+          //printf("iter %d, symb: %s\n", i, &reversedFileNameCurr[i]);
         }
 
 
@@ -108,6 +112,8 @@ int main(int argc, char **argv) {
 
         printDirPath(inputFilePath, 1 + lengthStartDir + lengthRegFileCurr);
 
+
+        
       }
     }
     closedir(d);
