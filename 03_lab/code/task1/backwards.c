@@ -40,7 +40,6 @@ void printDirPath(const char *str, const int length) {
 }
 
 int main(int argc, char **argv) {
-  // works without '/' at the end
   if (argc != 2) {
     printf("Error! No path of entered path\n");
     return 0;
