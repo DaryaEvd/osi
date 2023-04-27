@@ -16,6 +16,20 @@ int checkIsDir(const char *name) {
   return 0; // entry doesn't exist
 }
 
+void checkLastSym(const char *startDirPath) {
+  // printf("last sym is: %c\n", startDirPath[strlen(startDirPath)]);
+  // printf("last sym is: %c\n", startDirPath[strlen(startDirPath) - 1]);
+  if(startDirPath[strlen(startDirPath) - 1] == '/') {
+    printf("It ends with slash\n");
+  }
+  for (int i = strlen(startDirPath) - 1; i > 0; i--) {
+    printf("iter %d, sym %c \n", i, startDirPath[i]);
+    // if(startDirPath[strlen(startDirPath - 1)] == '/') {
+    //   printf("It ends with slash\n");
+    // }
+  }
+}
+
 int countStringLength(const char *str) {
   int length = strlen(str);
   if (str[length - 1] == '/') {
@@ -46,9 +60,15 @@ int main(int argc, char **argv) {
   }
   printf("Entered starting entry is: '%s'\n", startDirPath);
 
+  // int isLastSymSlash = checkLastSym(startDirPath);
+  checkLastSym(startDirPath);
+
   int lengthStartDir = countStringLength(startDirPath);
 
   char *endDirPath = calloc(lengthStartDir + SLASH + 1, sizeof(char));
+  if (!endDirPath) {
+    return 0;
+  }
 
   printf("strlen start path: %ld\n", strlen(startDirPath));
   printf("length start dir: %d\n", lengthStartDir);
@@ -77,7 +97,6 @@ int main(int argc, char **argv) {
     printf("iter %d, symb: %s\n", i, &nameReversedLastDir[i]);
   }
 
-  // char *reversedLastDir = calloc()
   strcat(endDirPath, beforeLastDir);
   strcat(endDirPath, nameReversedLastDir);
   strcat(endDirPath, "/");
@@ -104,8 +123,9 @@ int main(int argc, char **argv) {
 
         int lengthRegFileCurr = countStringLength(entry->d_name);
 
-        char *inputFilePath = calloc(
-          1 + SLASH + lengthStartDir + lengthRegFileCurr, sizeof(char));
+        char *inputFilePath =
+            calloc(1 + SLASH + lengthStartDir + lengthRegFileCurr,
+                   sizeof(char));
 
         char *reversedFileNameCurr =
             calloc(lengthRegFileCurr + 1, sizeof(char));
