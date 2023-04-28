@@ -22,6 +22,7 @@ int main(void) {
 
   int *addressToGet = returnAddrNoWarning();
 
+  printf("value in var: %d\n", *addressToGet);
   printf("%p\n", addressToGet);
 
   sleep(30);
