@@ -15,4 +15,4 @@ ln main bin/j_remove_symlink
 ln main bin/k_create_hard_link
 ln main bin/l_remove_hard_link
 ln main bin/m_print_perrmission_and_hardlinks_amount
-ln main bin/n_change_perrmissions
+ln main bin/n_change_permissions

@@ -2,7 +2,6 @@
 #include <dirent.h>
 #include <errno.h>
 #include <fcntl.h>
-#include <ftw.h>
 #include <stdio.h>
 #include <string.h>
 #include <sys/stat.h>
@@ -12,10 +11,11 @@
 #define BUFFER_SIZE 1024
 
 void a_create_dir(const char *pathName) {
-  // /home/dasha/masec/osi/labs/03_lab/code/number2/dir_for_trash
-
-  if (mkdir(pathName, 0777) == -1) {
+  if (mkdir(pathName, S_IROTH | S_IWOTH | S_IXOTH | S_IRUSR |
+                          S_IWUSR | S_IXUSR | S_IRGRP | S_IWGRP |
+                          S_IXGRP) == -1) {
     printf("Error: %s\n", strerror(errno));
+    return;
   }
 }
 
@@ -57,8 +57,8 @@ void c_delete_dir(const char *pathName) {
 void d_create_file(const char *pathName) {
   size_t lengthPath = strlen(pathName);
 
-  if (open(pathName, O_CREAT, S_IRUSR, S_IWUSR, S_IXGRP, S_IRWXO) ==
-      -1) {
+  if (open(pathName, O_CREAT, S_IRUSR, S_IWUSR, S_IXGRP, S_IRWXO,
+           S_IROTH, S_IROTH) == -1) {
     printf("Error: %s\n", strerror(errno));
     return;
   }
@@ -93,11 +93,8 @@ void f_delete_file(const char *pathName) {
   }
 }
 
-void g_create_symlink(const char *pathName) {
-  const char *newName = "/home/dasha/masec/osi/labs/03_lab/code/"
-                        "number2/link_to_newfile.txt";
-
-  if (symlink(pathName, newName) == -1) {
+void g_create_symlink(const char *pathName, const char *symLinkPath) {
+  if (symlink(pathName, symLinkPath) == -1) {
     printf("Error: %s\n", strerror(errno));
     return;
   }
@@ -118,11 +115,9 @@ void j_remove_symlink(const char *pathName) {
   }
 }
 
-void k_create_hard_link(const char *pathName) {
-  const char *newPathName =
-      "/home/dasha/masec/osi/labs/03_lab/code/number2/hard.txt";
-
-  if (link(pathName, newPathName) == -1) {
+void k_create_hard_link(const char *pathName,
+                        const char *hardLinkPath) {
+  if (link(pathName, hardLinkPath) == -1) {
     printf("Error: %s\n", strerror(errno));
     return;
   }
@@ -159,18 +154,28 @@ void m_print_perrmission_and_hardlinks_amount(const char *pathName) {
   printf("\n");
 }
 
-void n_change_perrmissions(const char *pathName, const char *perms) {
-  mode_t mode = 0;
+int parsePerms(const char *charPerms);
 
-  (perms[0] == 'r') ? (mode |= S_IRUSR) : (mode &= ~S_IRUSR);
-  (perms[1] == 'w') ? (mode |= S_IWUSR) : (mode &= ~S_IWUSR);
-  (perms[2] == 'x') ? (mode |= S_IXUSR) : (mode &= ~S_IXUSR);
-  (perms[3] == 'r') ? (mode |= S_IRGRP) : (mode &= ~S_IRGRP);
-  (perms[4] == 'w') ? (mode |= S_IWGRP) : (mode &= ~S_IWGRP);
-  (perms[5] == 'x') ? (mode |= S_IXGRP) : (mode &= ~S_IXGRP);
-  (perms[6] == 'r') ? (mode |= S_IROTH) : (mode &= ~S_IROTH);
-  (perms[7] == 'w') ? (mode |= S_IWOTH) : (mode &= ~S_IWOTH);
-  (perms[8] == 'x') ? (mode |= S_IXOTH) : (mode &= ~S_IXOTH);
+void n_change_permissions(const char *pathName,
+                          const char *charPerms) {
+
+  mode_t mode = parsePerms(charPerms);
 
   chmod(pathName, mode);
+}
+
+int parsePerms(const char *permsChar) {
+  mode_t result = 0;
+
+  (permsChar[0] == 'r') ? (result |= S_IRUSR) : (result &= ~S_IRUSR);
+  (permsChar[1] == 'w') ? (result |= S_IWUSR) : (result &= ~S_IWUSR);
+  (permsChar[2] == 'x') ? (result |= S_IXUSR) : (result &= ~S_IXUSR);
+  (permsChar[3] == 'r') ? (result |= S_IRGRP) : (result &= ~S_IRGRP);
+  (permsChar[4] == 'w') ? (result |= S_IWGRP) : (result &= ~S_IWGRP);
+  (permsChar[5] == 'x') ? (result |= S_IXGRP) : (result &= ~S_IXGRP);
+  (permsChar[6] == 'r') ? (result |= S_IROTH) : (result &= ~S_IROTH);
+  (permsChar[7] == 'w') ? (result |= S_IWOTH) : (result &= ~S_IWOTH);
+  (permsChar[8] == 'x') ? (result |= S_IXOTH) : (result &= ~S_IXOTH);
+
+  return result;
 }
