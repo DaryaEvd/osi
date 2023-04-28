@@ -7,8 +7,8 @@ int globalNotInitedInt;
 int globalInitedInt = 5;
 char *globalArrayChar = "global array, privet!";
 
-int globalConstInt = 123;
-int globalConstNotInit;
+const int globalConstInt = 123;
+const int globalConstNotInit;
 
 void showLocalAddresses() {
   // i

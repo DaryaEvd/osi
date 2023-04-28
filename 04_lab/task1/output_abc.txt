@@ -1,0 +1,111 @@
+cat /proc/24765/maps
+
+function():              0x55d5957a51c9
+========================================================
+LOCAL VARIABLES
+local initialized:       0x7ffd39380d8c (5)
+local not init:          0x7ffd39380d90 (-1787145136)
+local char arr:          0x7ffd39380d98 (Hello from local)
+static int init:         0x55d5957a8014 (1)
+static in not init:      0x55d5957a802c (0)
+static char arr:         0x55d5957a8020 0x0x55d5957a6279 (Hello from static char)
+const int:               0x7ffd39380d94 (78)
+const char arr:          0x7ffd39380da0 (h e l l o   m y  c o n s t n)
+========================================================
+GLOBAL VARIABLES
+global not inited int:           0x55d5957a8034 (0)
+global inited int:               0x55d5957a8010 (5)
+global array char:               0x55d5957a8018 0x0x55d5957a6008 (global array, privet!)
+global const int inited:         0x55d5957a6020 (123)
+global const int not inited:     0x55d5957a8030 (0)
+========================================================
+pid: 24765
+
+///////////////////////
+55d5957a4000-55d5957a5000 r--p 00000000 08:06 27792977                   /home/dasha/masec/osi/labs/04_lab/task1/a
+55d5957a5000-55d5957a6000 r-xp 00001000 08:06 27792977                   /home/dasha/masec/osi/labs/04_lab/task1/a
+55d5957a6000-55d5957a7000 r--p 00002000 08:06 27792977                   /home/dasha/masec/osi/labs/04_lab/task1/a
+55d5957a7000-55d5957a8000 r--p 00002000 08:06 27792977                   /home/dasha/masec/osi/labs/04_lab/task1/a
+55d5957a8000-55d5957a9000 rw-p 00003000 08:06 27792977                   /home/dasha/masec/osi/labs/04_lab/task1/a
+55d596681000-55d5966a2000 rw-p 00000000 00:00 0                          [heap]
+7fe567815000-7fe567837000 r--p 00000000 08:06 19405756                   /usr/lib/x86_64-linux-gnu/libc-2.31.so
+7fe567837000-7fe5679af000 r-xp 00022000 08:06 19405756                   /usr/lib/x86_64-linux-gnu/libc-2.31.so
+7fe5679af000-7fe5679fd000 r--p 0019a000 08:06 19405756                   /usr/lib/x86_64-linux-gnu/libc-2.31.so
+7fe5679fd000-7fe567a01000 r--p 001e7000 08:06 19405756                   /usr/lib/x86_64-linux-gnu/libc-2.31.so
+7fe567a01000-7fe567a03000 rw-p 001eb000 08:06 19405756                   /usr/lib/x86_64-linux-gnu/libc-2.31.so
+7fe567a03000-7fe567a09000 rw-p 00000000 00:00 0 
+7fe567a32000-7fe567a33000 r--p 00000000 08:06 19400874                   /usr/lib/x86_64-linux-gnu/ld-2.31.so
+7fe567a33000-7fe567a56000 r-xp 00001000 08:06 19400874                   /usr/lib/x86_64-linux-gnu/ld-2.31.so
+7fe567a56000-7fe567a5e000 r--p 00024000 08:06 19400874                   /usr/lib/x86_64-linux-gnu/ld-2.31.so
+7fe567a5f000-7fe567a60000 r--p 0002c000 08:06 19400874                   /usr/lib/x86_64-linux-gnu/ld-2.31.so
+7fe567a60000-7fe567a61000 rw-p 0002d000 08:06 19400874                   /usr/lib/x86_64-linux-gnu/ld-2.31.so
+7fe567a61000-7fe567a62000 rw-p 00000000 00:00 0 
+7ffd39363000-7ffd39384000 rw-p 00000000 00:00 0                          [stack]
+7ffd393dc000-7ffd393e0000 r--p 00000000 00:00 0                          [vvar]
+7ffd393e0000-7ffd393e2000 r-xp 00000000 00:00 0                          [vdso]
+ffffffffff600000-ffffffffff601000 --xp 00000000 00:00 0                  [vsyscall]
+
+
+nm ./a
+
+0000000000004028 B __bss_start
+0000000000004028 b completed.8061
+                 w __cxa_finalize@@GLIBC_2.2.5
+0000000000004000 D __data_start
+0000000000004000 W data_start
+0000000000001110 t deregister_tm_clones
+0000000000001180 t __do_global_dtors_aux
+0000000000003da0 d __do_global_dtors_aux_fini_array_entry
+0000000000004008 D __dso_handle
+0000000000003da8 d _DYNAMIC
+0000000000004028 D _edata
+0000000000004038 B _end
+00000000000014c8 T _fini
+00000000000011c0 t frame_dummy
+0000000000003d98 d __frame_dummy_init_array_entry
+0000000000002404 r __FRAME_END__
+                 U getpid@@GLIBC_2.2.5
+0000000000004018 D globalArrayChar
+0000000000002020 R globalConstInt
+0000000000004030 B globalConstNotInit
+0000000000004010 D globalInitedInt
+0000000000004034 B globalNotInitedInt
+0000000000003f98 d _GLOBAL_OFFSET_TABLE_
+                 w __gmon_start__
+0000000000002290 r __GNU_EH_FRAME_HDR
+0000000000001000 t _init
+0000000000003da0 d __init_array_end
+0000000000003d98 d __init_array_start
+0000000000002000 R _IO_stdin_used
+                 w _ITM_deregisterTMCloneTable
+                 w _ITM_registerTMCloneTable
+00000000000014c0 T __libc_csu_fini
+0000000000001450 T __libc_csu_init
+                 U __libc_start_main@@GLIBC_2.2.5
+0000000000001314 T main
+                 U printf@@GLIBC_2.2.5
+                 U puts@@GLIBC_2.2.5
+0000000000001140 t register_tm_clones
+00000000000011c9 T showLocalAddresses
+                 U sleep@@GLIBC_2.2.5
+                 U __stack_chk_fail@@GLIBC_2.4
+00000000000010e0 T _start
+0000000000004020 d staticChar.3448
+0000000000004014 d staticInit.3446
+000000000000402c b staticNotInit.3447
+0000000000004028 D __TMC_END__
+
+BSS section typically contains zero-initialized or uninitialized data, 
+although the exact behavior is system dependent.
+
+0000000000004030 B globalConstNotInit
+0000000000004034 B globalNotInitedInt
+So, it's unitialized data section (BSS)
+
+0000000000004018 D globalArrayChar
+0000000000004010 D globalInitedInt
+0000000000004010 D globalInitedInt
+So, it's initialized data section 
+
+0000000000002020 R globalConstInt
+So, it's read-only data section 
