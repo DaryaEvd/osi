@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 int main(void) {
-  const int sizeBuffer = 100;
+  const int sizeBuffer = 20;
   // i
   char *buffer = calloc(sizeBuffer, sizeof(char));
   if(!buffer) {
@@ -16,7 +16,7 @@ int main(void) {
   for(int i = 0; i <sizeBuffer; i++) {
     printf("%c", buffer[i]);
   }
-  printf("\n");
+  printf("\n"); 
 
   // iv
   free(buffer);
@@ -35,7 +35,7 @@ int main(void) {
 
   // viii
  for(int i = 0; i <sizeBuffer; i++) {
-    printf("%c", buffer[i]);
+    printf("%c", newBuffer[i]);
   }
   printf("\n");
 
