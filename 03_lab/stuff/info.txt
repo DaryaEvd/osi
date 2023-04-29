@@ -21,3 +21,23 @@ https://stackoverflow.com/questions/49392870/c-programming-directory-name-from-d
 https://pubs.opengroup.org/onlinepubs/7908799/xsh/dirent.h.html
 
 -пункт про удаление каталога
+
+
+--пункт про вывод содержимого файла
+errno -l
+perror vs stderr
+https://stackoverflow.com/questions/12102332/when-should-i-use-perror-and-fprintfstderr
+
+
+
+https://www.geeksforgeeks.org/input-output-system-calls-c-create-open-close-read-write/
+
+
+посмотреть таблицу разделов файловой системы
+'sudo parted -l'
+
+
+'man 3 telldir' - return current location in directory stream
+
+ну тип man сисколов для чтения, записи и тд:
+https://profile.iiita.ac.in/bibhas.ghoshal/lab_files/System%20calls%20for%20files%20and%20directories%20in%20Linux.html

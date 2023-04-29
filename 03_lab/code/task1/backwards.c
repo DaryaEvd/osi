@@ -65,9 +65,9 @@ int main(int argc, char **argv) {
     return 0;
   }
 
-  printf("strlen start path: %ld\n", strlen(startDirPath));
-  printf("length start dir: %d\n", lengthStartDir);
-  printf("strlen End path: %ld\n", strlen(endDirPath));
+  // printf("strlen start path: %ld\n", strlen(startDirPath));
+  // printf("length start dir: %d\n", lengthStartDir);
+  // printf("strlen End path: %ld\n", strlen(endDirPath));
 
   int amountSymbLastDir = 0;
   for (int i = lengthStartDir - 1; i >= 0; i--) {
@@ -76,7 +76,7 @@ int main(int argc, char **argv) {
     }
     amountSymbLastDir++;
   }
-  printf("amountSymbLastDir: %d\n", amountSymbLastDir);
+  // printf("amountSymbLastDir: %d\n", amountSymbLastDir);
 
   char *beforeLastDir =
       calloc(lengthStartDir - amountSymbLastDir + 1, sizeof(char));
@@ -86,7 +86,7 @@ int main(int argc, char **argv) {
   }
   memcpy(beforeLastDir, startDirPath,
          lengthStartDir - amountSymbLastDir);
-  printf("before last dir: ");
+  // printf("before last dir: ");
   // printDirPath(beforeLastDir, lengthStartDir);
 
   char *nameReversedLastDir =
@@ -104,9 +104,9 @@ int main(int argc, char **argv) {
   strcat(endDirPath, beforeLastDir);
   strcat(endDirPath, nameReversedLastDir);
   strcat(endDirPath, "/");
-  printf("path for reversed dir: ");
-  printDirPath(endDirPath, lengthStartDir);
-
+  // printf("path for reversed dir: ");
+  // printDirPath(endDirPath, lengthStartDir);
+//TODO:  проверить что такая папка уже есть и если есть завершиться
   struct stat st = {0};
   if (stat(endDirPath, &st) == -1) {
     mkdir(endDirPath, S_IRWXU | S_IRWXO);
@@ -119,11 +119,11 @@ int main(int argc, char **argv) {
     while ((entry = readdir(d)) != NULL) {
 
       if (entry->d_type == DT_REG) {
-        printf("curr file name is: ");
+        // printf("curr file name is: ");
         for (int i = 0; i < strlen(entry->d_name); i++) {
-          printf("%c", entry->d_name[i]);
+          // printf("%c", entry->d_name[i]);
         }
-        printf("\n");
+        // printf("\n");
 
         int lengthRegFileCurr = countStringLength(entry->d_name);
 
@@ -150,16 +150,16 @@ int main(int argc, char **argv) {
         for (int i = 0; i < lengthRegFileCurr; i++) {
           reversedFileNameCurr[i] =
               entry->d_name[lengthRegFileCurr - i - 1];
-          printf("iter %d, symb: %s\n", i, &reversedFileNameCurr[i]);
+          // printf("iter %d, symb: %s\n", i, &reversedFileNameCurr[i]);
         }
 
         strcat(inputFilePath, startDirPath);
         strcat(inputFilePath, "/");
         strcat(inputFilePath, entry->d_name);
 
-        printf("path for input file: ");
-        printDirPath(inputFilePath,
-                     1 + lengthStartDir + lengthRegFileCurr);
+        // printf("path for input file: ");
+        // printDirPath(inputFilePath,
+        //              1 + lengthStartDir + lengthRegFileCurr);
 
         char *outputFilePath =
             calloc(lengthStartDir + lengthRegFileCurr + SLASH + 1,
@@ -176,10 +176,13 @@ int main(int argc, char **argv) {
         strcat(outputFilePath, endDirPath);
         strcat(outputFilePath, reversedFileNameCurr);
 
-        printf("path for output file: ");
-        printDirPath(outputFilePath,
-                     1 + lengthStartDir + lengthRegFileCurr);
+        // printf("path for output file: ");
+        // printDirPath(outputFilePath,
+        //              1 + lengthStartDir + lengthRegFileCurr);
 
+
+      //TODO: OPEN AND CLOSE() !!!!!!!
+      // ФЛАГ b разобраться чо каво 
         FILE *input = fopen(inputFilePath, "r");
         if (input == NULL) {
           printf("can't open input file: ");
@@ -210,19 +213,21 @@ int main(int argc, char **argv) {
           return 0;
         }
 
-        printf("reading file ... \n");
-        printDirPath(inputFilePath,
-                     1 + lengthStartDir + lengthRegFileCurr);
+        // printf("reading file ... \n");
+        // printDirPath(inputFilePath,
+        //              1 + lengthStartDir + lengthRegFileCurr);
 
         fseek(input, 0L, SEEK_END);
 
-        int sizeFile = ftell(input) - 1;
-        printf("size file is: %d\n", sizeFile);
+//TODO: почему читать по байтам плохо
+// read write -= учитывать возвращаемые значения РАЗОБРАТЬСЯ
+        ssize_t sizeFile = ftell(input) - 1;
+        // printf("size file is: %d\n", sizeFile);
 
         while (sizeFile >= 0L) {
           fseek(input, sizeFile, SEEK_SET);
           char symb = fgetc(input);
-          printf("symb is: %c\n", symb);
+          // printf("symb is: %c\n", symb);
           fputc(symb, output);
           sizeFile--;
         }
