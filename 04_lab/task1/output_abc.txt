@@ -109,3 +109,8 @@ So, it's initialized data section
 
 0000000000002020 R globalConstInt
 So, it's read-only data section 
+
+
+BSS секция маппится на экзешник
+а почему? 
+там ведь данные, которые мы не сохраняем ........
