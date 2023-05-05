@@ -6,25 +6,21 @@
 
 char *extractLastToken(const char *inputPathToBin) {
   int amountSymbolsInLastToken = 0;
-  printf("strlen: %ld\n", strlen(inputPathToBin));
 
-  for(int i = strlen(inputPathToBin) - 1; i > 0; i--) {
-    if(inputPathToBin[i] == '/') {
+  for (int i = strlen(inputPathToBin) - 1; i > 0; i--) {
+    if (inputPathToBin[i] == '/') {
       break;
     }
     amountSymbolsInLastToken++;
-    printf("iter %d symb %c\n", i, inputPathToBin[i]);
   }
 
-  printf("amount is: %d\n", amountSymbolsInLastToken);
+  char *lastToken =
+      calloc(amountSymbolsInLastToken + 1, sizeof(char));
 
-  char *lastToken = calloc(amountSymbolsInLastToken + 1, sizeof(char));
-
-  for(int i = 0; i < amountSymbolsInLastToken; i++) {
-    lastToken[i] = inputPathToBin[amountSymbolsInLastToken - i + 1];
+  for (int i = 0; i < amountSymbolsInLastToken; i++) {
+    lastToken[i] = inputPathToBin[i + (strlen(inputPathToBin) -
+                                       amountSymbolsInLastToken)];
   }
-
-  printf("lastToken is: %s\n", lastToken);
 
   return lastToken;
 }
@@ -34,11 +30,10 @@ int main(int argc, char **argv) {
   // argv[0] - command, argv[1] - pathName
 
   const char *inputPathToBin = argv[0];
-  printf("input path is: %s\n", inputPathToBin);
-  
+
   char *lastToken = extractLastToken(inputPathToBin);
-  
-  if (strcmp(argv[0], "./bin/a_create_dir") == 0) {
+
+  if (strcmp(lastToken, "a_create_dir") == 0) {
     if (argc != 2) {
       printf("Bad amount of argc\n");
       return 0;
