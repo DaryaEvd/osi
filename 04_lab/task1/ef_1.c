@@ -21,6 +21,8 @@ int main(void) {
 
   // v
   printf("%s\n", buffer); // prints empty string
+  // то, что мы освободили данные в куче, асболютно не значит
+  // что мы не можем к ней обращаться 
   
   // vi
   char *newBuffer = calloc(sizeBuffer, sizeof(char));
