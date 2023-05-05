@@ -11,6 +11,8 @@
 #define BUFFER_SIZE 1024
 
 void a_create_dir(const char *pathName) {
+
+  printf("HELLLOOOO AAAAAAAAAAAAAAAAAAAA\n");
   if (mkdir(pathName, S_IROTH | S_IWOTH | S_IXOTH | S_IRUSR |
                           S_IWUSR | S_IXUSR | S_IRGRP | S_IWGRP |
                           S_IXGRP) == -1) {
@@ -57,8 +59,7 @@ void c_delete_dir(const char *pathName) {
 void d_create_file(const char *pathName) {
   size_t lengthPath = strlen(pathName);
 
-  if (open(pathName, O_CREAT, S_IRUSR, S_IWUSR, S_IXGRP, S_IRWXO,
-           S_IROTH, S_IROTH) == -1) {
+  if (open(pathName, O_CREAT, S_IRWXU, S_IRWXO, S_IRWXG) == -1) {
     printf("Error: %s\n", strerror(errno));
     return;
   }
