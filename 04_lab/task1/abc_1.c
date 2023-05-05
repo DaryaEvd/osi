@@ -10,6 +10,8 @@ char *globalArrayChar = "global array, privet!";
 const int globalConstInt = 123;
 const int globalConstNotInit;
 
+static int staticVarGlobal = 777;
+
 void showLocalAddresses() {
   // i
   int localVarInit = 5;
@@ -57,6 +59,8 @@ int main(void) {
 
   printf("global const int inited: \t %p (%d)\n", &globalConstInt, globalConstInt);
   printf("global const int not inited: \t %p (%d)\n", &globalConstNotInit, globalConstNotInit);
+
+  printf("static global int: \t %p (%d)\n", &staticVarGlobal, staticVarGlobal);
 
   printf("========================================================\n");
  

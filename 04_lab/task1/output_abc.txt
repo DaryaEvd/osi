@@ -93,22 +93,22 @@ nm ./a
 0000000000004020 d staticChar.3448
 0000000000004014 d staticInit.3446
 000000000000402c b staticNotInit.3447
-0000000000004028 D __TMC_END__
+0000000000004028 D __TMC_END__labs/04_lab/task1$ nm ./a
 
+--------------------------------------------------------------------------
 BSS section typically contains zero-initialized or uninitialized data, 
 although the exact behavior is system dependent.
 
 0000000000004030 B globalConstNotInit
-0000000000004034 B globalNotInitedInt
+000000000000402c b staticNotInit.3447
 So, it's unitialized data section (BSS)
 
 0000000000004018 D globalArrayChar
 0000000000004010 D globalInitedInt
-0000000000004010 D globalInitedInt
-So, it's initialized data section 
+0000000000004014 d staticInit.344
+So, it's initialized data section. 
 
 0000000000002020 R globalConstInt
-So, it's read-only data section 
 
 ===================================================================
 
@@ -120,8 +120,8 @@ as the case would be with BSS (uninitialized data).
 
 // Прост хорошая статейка https://habr.com/ru/companies/smart_soft/articles/185226/
 
-BSS секция маппится на экзешник
-а почему? 
+
+BSS секция маппится на экзешник а почему? 
 там ведь данные, которые мы не сохраняем ........
 
 
@@ -145,3 +145,6 @@ BSS секция маппится на экзешник
 How to identify STACK and HEAP segments in /proc/$PID/maps?
 https://stackoverflow.com/questions/19379793/how-to-identify-stack-and-heap-segments-in-proc-pid-maps-file
 
+What does numbers after static vars means in nm?
+https://stackoverflow.com/questions/43226797/want-to-understand-output-of-nm-for-static-variable-which-are-local-to-function
+name mangling for static variables 
