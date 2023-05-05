@@ -110,7 +110,38 @@ So, it's initialized data section
 0000000000002020 R globalConstInt
 So, it's read-only data section 
 
+===================================================================
+
+https://www.kernel.org/doc/Documentation/filesystems/proc.txt
+
+
+0 indicates that no inode is associated with the memory region, 
+as the case would be with BSS (uninitialized data).
+
+// Прост хорошая статейка https://habr.com/ru/companies/smart_soft/articles/185226/
 
 BSS секция маппится на экзешник
 а почему? 
 там ведь данные, которые мы не сохраняем ........
+
+
+Маппирование BSS секции позволяет зарезервировать фиксированный
+размер памяти для неиницаилизированных глобальных и статических переменных.
+Без такого маппирования пришлось бы динамически выделять память 
+в runtime.
+
+В BSS-секции нет значения переменных. 
+Например, если мы написали A[1 гигабайт] и никак не проинициализировали этот массив.
+Тогда в BSS нет никакого смысла брать и в бинарном файле выделять гигабайт. 
+Мы просто берем и пишем, что у нас есть массив А размера 1 Гб.
+И при формировании адресного пространства, под массив А система сделает vma 1 Гб
+и проирнициализирует эту vma нулями.
+
+В .data мы вынуждены хранить значения.
+Если напишем int B[1 гигабайт] = {проирнициализируем его как-то}
+Тогда в .data массив B  будет занимать гигабайт в исполняемомом файле.
+
+
+How to identify STACK and HEAP segments in /proc/$PID/maps?
+https://stackoverflow.com/questions/19379793/how-to-identify-stack-and-heap-segments-in-proc-pid-maps-file
+
