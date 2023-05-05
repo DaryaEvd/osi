@@ -156,13 +156,52 @@ void m_print_perrmission_and_hardlinks_amount(const char *pathName) {
 }
 
 int parsePerms(const char *charPerms);
+int checkCorrectInput(const char *charPerms);
 
 void n_change_permissions(const char *pathName,
                           const char *charPerms) {
+  if (checkCorrectInput(charPerms) != 0) {
+    printf("Incorrect ipnut of permissions!\n");
+    return;
+  }
 
   mode_t mode = parsePerms(charPerms);
 
   chmod(pathName, mode);
+}
+
+int checkCorrectInput(const char *charPerms) {
+  if ((charPerms[0] != 'r') ||  (charPerms[0] == '-')) {
+    return 0;
+  }
+  if ((charPerms[1] != 'w') ||  (charPerms[1] == '-')) {
+    return 0;
+  }
+  if ((charPerms[2] != 'x') ||  (charPerms[2] == '-')) {
+    return 0;
+  }
+
+  if ((charPerms[3] != 'r') ||  (charPerms[3] == '-')) {
+    return 0;
+  }
+  if ((charPerms[4] != 'w') ||  (charPerms[4] == '-')) {
+    return 0;
+  }
+  if ((charPerms[5] != 'x') ||  (charPerms[5] == '-')) {
+    return 0;
+  }
+
+  if ((charPerms[6] != 'r') ||  (charPerms[6] == '-')) {
+    return 0;
+  }
+  if ((charPerms[7] != 'w') ||  (charPerms[7] == '-')) {
+    return 0;
+  }
+  if ((charPerms[8] != 'x') ||  (charPerms[7] == '-')) {
+    return 0;
+  }
+
+  return 1;
 }
 
 int parsePerms(const char *permsChar) {
