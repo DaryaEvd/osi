@@ -1,8 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 int main(void) {
-  const int sizeBuffer = 20;
+  const int sizeBuffer = 100;
   // i
   char *buffer = calloc(sizeBuffer, sizeof(char));
   if(!buffer) {
@@ -10,34 +11,25 @@ int main(void) {
   }
 
   // ii
-  buffer = "hello my world\n"; 
+  strcpy(buffer, "hello my hoooome");
 
   // iii
-  for(int i = 0; i <sizeBuffer; i++) {
-    printf("%c", buffer[i]);
-  }
-  printf("\n"); 
+  printf("%s\n", buffer); // prints 'hello my hoooome'
 
   // iv
   free(buffer);
 
   // v
-  for(int i = 0; i <sizeBuffer; i++) {
-    printf("%c", buffer[i]);
-  }
-  printf("\n");
-
+  printf("%s\n", buffer); // prints empty string
+  
   // vi
   char *newBuffer = calloc(sizeBuffer, sizeof(char));
   
   // vii
-  newBuffer = "Hello new buffer\n";  
+  strcpy(newBuffer, "My cat is fat :)");
 
   // viii
- for(int i = 0; i <sizeBuffer; i++) {
-    printf("%c", newBuffer[i]);
-  }
-  printf("\n");
+  printf("%s\n", newBuffer); //prints 'My cat is fat :)'
 
   // ix
   char *pointer = &newBuffer[sizeBuffer / 2];
@@ -46,10 +38,7 @@ int main(void) {
   free(&newBuffer[sizeBuffer / 2]);
 
   // xi
-  for(int i = 0; i <sizeBuffer; i++) {
-    printf("%c", buffer[i]);
-  }
-  printf("\n");
+  printf("%s\n", newBuffer);
 
   return 0;
 }
