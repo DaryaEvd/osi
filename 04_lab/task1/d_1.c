@@ -85,42 +85,11 @@ main:
   int *addressToGet = badFunction();
 
   printf("value in var: %d\n", *addressToGet);
+  // TODO: почему значение не затерлось ?!??!?!??!?!
+
   printf("%p\n", addressToGet);
 
   sleep(30);
 
   return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//https://www.codeguru.com/visual-studio/function-calls-part-3-frame-pointer-and-local-variables/
