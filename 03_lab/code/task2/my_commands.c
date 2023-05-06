@@ -11,8 +11,6 @@
 #define BUFFER_SIZE 1024
 
 void a_create_dir(const char *pathName) {
-
-  printf("HELLLOOOO AAAAAAAAAAAAAAAAAAAA\n");
   if (mkdir(pathName, S_IROTH | S_IWOTH | S_IXOTH | S_IRUSR |
                           S_IWUSR | S_IXUSR | S_IRGRP | S_IWGRP |
                           S_IXGRP) == -1) {

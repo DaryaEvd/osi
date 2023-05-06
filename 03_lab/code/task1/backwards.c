@@ -195,11 +195,15 @@ int main(int argc, char **argv) {
           return 0;
         }
 
+        /*
+        TODO: -почему читать по байтам - это плохо? 
+              FIX redaing by bytes !!!!!!!!!!!!
+        */
         off_t offset = lseek(inputFileDescriptor, 0L, SEEK_END);
 
         while (offset > 0) {
           lseek(inputFileDescriptor, --offset, SEEK_SET);
-          ssize_t readCount = read(inputFileDescriptor, buffer, 1);
+          ssize_t readCount = read(inputFileDescriptor, buffer, 1); 
           ssize_t writeCount = write(outputFileDescriptor, buffer, readCount);
         }
 

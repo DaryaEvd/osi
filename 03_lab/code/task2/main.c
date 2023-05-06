@@ -25,6 +25,15 @@ char *extractLastToken(const char *inputPathToBin) {
   return lastToken;
 }
 
+/*
+TODO: 
+  - почему нельзя создать симлинку на директорию?
+  - можно ли создать симлинку на симлинку?
+  - можно ли создать хардлинку на симлинку?
+  - можно ли создать хардлинку на директорию?
+  и еще какие-нить компибнации... 
+*/
+
 int main(int argc, char **argv) {
   // printf("%s\n", argv[0]);
   // argv[0] - command, argv[1] - pathName
