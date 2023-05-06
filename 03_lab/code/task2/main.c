@@ -41,7 +41,7 @@ int main(int argc, char **argv) {
     a_create_dir(argv[1]);
   }
 
-  if (strcmp(argv[0], "./bin/b_print_dir_content") == 0) {
+  if (strcmp(lastToken, "b_print_dir_content") == 0) {
     if (argc != 2) {
       printf("Bad amount of argc\n");
       return 0;
@@ -49,7 +49,7 @@ int main(int argc, char **argv) {
     b_print_dir_content(argv[1]);
   }
 
-  if (strcmp(argv[0], "./bin/c_delete_dir") == 0) {
+  if (strcmp(lastToken, "c_delete_dir") == 0) {
     if (argc != 2) {
       printf("Bad amount of argc\n");
       return 0;
@@ -57,7 +57,7 @@ int main(int argc, char **argv) {
     c_delete_dir(argv[1]);
   }
 
-  if (strcmp(argv[0], "./bin/d_create_file") == 0) {
+  if (strcmp(lastToken, "d_create_file") == 0) {
     if (argc != 2) {
       printf("Bad amount of argc\n");
       return 0;
@@ -65,7 +65,7 @@ int main(int argc, char **argv) {
     d_create_file(argv[1]);
   }
 
-  if (strcmp(argv[0], "./bin/e_print_file_content") == 0) {
+  if (strcmp(lastToken, "e_print_file_content") == 0) {
     if (argc != 2) {
       printf("Bad amount of argc\n");
       return 0;
@@ -73,7 +73,7 @@ int main(int argc, char **argv) {
     e_print_file_content(argv[1]);
   }
 
-  if (strcmp(argv[0], "./bin/f_delete_file") == 0) {
+  if (strcmp(lastToken, "f_delete_file") == 0) {
     if (argc != 2) {
       printf("Bad amount of argc\n");
       return 0;
@@ -81,7 +81,7 @@ int main(int argc, char **argv) {
     f_delete_file(argv[1]);
   }
 
-  if (strcmp(argv[0], "./bin/g_create_symlink") == 0) {
+  if (strcmp(lastToken, "g_create_symlink") == 0) {
     if (argc != 3) {
       printf("Bad amount of argc\n");
       return 0;
@@ -89,7 +89,7 @@ int main(int argc, char **argv) {
     g_create_symlink(argv[1], argv[2]);
   }
 
-  if (strcmp(argv[0], "./bin/h_print_symlink_content") == 0) {
+  if (strcmp(lastToken, "h_print_symlink_content") == 0) {
     if (argc != 2) {
       printf("Bad amount of argc\n");
       return 0;
@@ -97,7 +97,7 @@ int main(int argc, char **argv) {
     h_print_symlink_content(argv[1]);
   }
 
-  if (strcmp(argv[0], "./bin/i_print_target_by_symlink") == 0) {
+  if (strcmp(lastToken, "i_print_target_by_symlink") == 0) {
     if (argc != 2) {
       printf("Bad amount of argc\n");
       return 0;
@@ -105,7 +105,7 @@ int main(int argc, char **argv) {
     i_print_target_by_symlink(argv[1]);
   }
 
-  if (strcmp(argv[0], "./bin/j_remove_symlink") == 0) {
+  if (strcmp(lastToken, "j_remove_symlink") == 0) {
     if (argc != 2) {
       printf("Bad amount of argc\n");
       return 0;
@@ -113,7 +113,7 @@ int main(int argc, char **argv) {
     j_remove_symlink(argv[1]);
   }
 
-  if (strcmp(argv[0], "./bin/k_create_hard_link") == 0) {
+  if (strcmp(lastToken, "k_create_hard_link") == 0) {
     if (argc != 3) {
       printf("Bad amount of argc\n");
       return 0;
@@ -121,7 +121,7 @@ int main(int argc, char **argv) {
     k_create_hard_link(argv[1], argv[2]);
   }
 
-  if (strcmp(argv[0], "./bin/l_remove_hard_link") == 0) {
+  if (strcmp(lastToken, "l_remove_hard_link") == 0) {
     if (argc != 2) {
       printf("Bad amount of argc\n");
       return 0;
@@ -129,8 +129,8 @@ int main(int argc, char **argv) {
     l_remove_hard_link(argv[1]);
   }
 
-  if (strcmp(argv[0],
-             "./bin/m_print_perrmission_and_hardlinks_amount") == 0) {
+  if (strcmp(lastToken,
+             "m_print_perrmission_and_hardlinks_amount") == 0) {
     if (argc != 2) {
       printf("Bad amount of argc\n");
       return 0;
@@ -138,7 +138,7 @@ int main(int argc, char **argv) {
     m_print_perrmission_and_hardlinks_amount(argv[1]);
   }
 
-  if (strcmp(argv[0], "./bin/n_change_permissions") == 0) {
+  if (strcmp(argv[0], "n_change_permissions") == 0) {
     if (argc != 3) {
       printf("Bad amount of argc\n");
       return 0;

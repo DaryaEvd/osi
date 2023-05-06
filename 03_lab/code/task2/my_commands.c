@@ -206,7 +206,7 @@ int checkCorrectInput(const char *charPerms) {
 
 int parsePerms(const char *permsChar) {
   mode_t result = 0;
-
+  
   (permsChar[0] == 'r') ? (result |= S_IRUSR) : (result &= ~S_IRUSR);
   (permsChar[1] == 'w') ? (result |= S_IWUSR) : (result &= ~S_IWUSR);
   (permsChar[2] == 'x') ? (result |= S_IXUSR) : (result &= ~S_IXUSR);
