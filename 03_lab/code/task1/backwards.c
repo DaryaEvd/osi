@@ -53,7 +53,6 @@ int main(int argc, char **argv) {
            startDirPath);
     return 0;
   }
-  printf("Entered starting entry is: '%s'\n", startDirPath);
 
   int isLastSymSlash = checkLastSym(startDirPath);
   if (isLastSymSlash == 1) {
@@ -121,11 +120,11 @@ int main(int argc, char **argv) {
       }
 
       if (entry->d_type == DT_REG) {
-        printf("curr file name is: ");
+        // printf("curr file name is: ");
         for (int i = 0; i < strlen(entry->d_name); i++) {
-          printf("%c", entry->d_name[i]);
+          // printf("%c", entry->d_name[i]);
         }
-        printf("\n");
+        // printf("\n");
 
         int lengthRegFileCurr = countStringLength(entry->d_name);
 
@@ -200,13 +199,35 @@ int main(int argc, char **argv) {
               FIX redaing by bytes !!!!!!!!!!!!
         */
         off_t offset = lseek(inputFileDescriptor, 0L, SEEK_END);
+        lseek(inputFileDescriptor, -offset, SEEK_END);
 
+
+        char *clown = malloc(offset);
+
+        if(read(inputFileDescriptor, clown, offset) == offset) {
+          printf("oaoaoao\n");
+          write(outputFileDescriptor, clown, offset);
+        }
+
+        free(clown);
+
+
+
+
+        // int sizeFile = ftell(outputFileDescriptor);
+
+
+        // write(outputFileDescriptor, buffer, offset);
+        
+
+
+/*
         while (offset > 0) {
           lseek(inputFileDescriptor, --offset, SEEK_SET);
           ssize_t readCount = read(inputFileDescriptor, buffer, 1); 
           ssize_t writeCount = write(outputFileDescriptor, buffer, readCount);
         }
-
+*/
         close(inputFileDescriptor);
         close(outputFileDescriptor);
 
