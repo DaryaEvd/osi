@@ -225,25 +225,42 @@ int main(int argc, char **argv) {
         */
 
         off_t sizeFile = lseek(inputFileDescriptor, 0L, SEEK_END);
+
         if (sizeFile <= sizeOfLittleBuffer) {
-          printf("sdkfjsadkfasdf\n");
           lseek(inputFileDescriptor, -sizeFile, SEEK_END);
-          ssize_t readCount =  
+          ssize_t readCount =
               read(inputFileDescriptor, littleBuffer, sizeFile);
-          for (int i = sizeFile - 1; i >= 0; i--) {
+          for (ssize_t i = sizeFile - 1; i >= 0; i--) {
             write(outputFileDescriptor, &littleBuffer[i], 1);
           }
-          // size_t writeCount =
-          // write(outputFileDescriptor, littleBuffer, readCount);
         }
 
-        // ssize_t offset = lseek(inputFileDescriptor, 0L, SEEK_END);
-        // while (offset > 0) {
-        //   lseek(inputFileDescriptor, --offset, SEEK_SET);
-        //   ssize_t readCount = read(inputFileDescriptor, buffer, 1);
-        //   ssize_t writeCount =
-        //       write(outputFileDescriptor, buffer, readCount);
-        // }
+        else {
+          lseek(inputFileDescriptor, -sizeOfLittleBuffer, SEEK_END);
+
+          while (sizeFile > 0) {
+            ssize_t readCount =
+                read(inputFileDescriptor, littleBuffer,
+                     sizeOfLittleBuffer);
+
+            for (ssize_t i = sizeFile - 1; i >= 0; i--) {
+              write(outputFileDescriptor, &littleBuffer[i], 1);
+            }
+
+            lseek(inputFileDescriptor, -2 * sizeOfLittleBuffer,
+                  SEEK_CUR);
+            sizeFile -= sizeOfLittleBuffer;
+          }
+
+          ssize_t remainSizeFile = sizeFile;
+          lseek(inputFileDescriptor, -remainSizeFile, SEEK_CUR);
+          ssize_t readCount =
+              read(inputFileDescriptor, littleBuffer, remainSizeFile);
+
+          for (ssize_t i = remainSizeFile - 1; i >= 0; i--) {
+            write(outputFileDescriptor, &littleBuffer[i], 1);
+          }
+        }
 
         close(inputFileDescriptor);
         close(outputFileDescriptor);
