@@ -128,8 +128,6 @@ int main(int argc, char **argv) {
     mkdir(endDirPath, S_IRWXU | S_IRWXO);
   }
 
-  char *buffer = malloc(sizeof(char));
-
   const int sizeOfLittleBuffer = 8192;
   char *littleBuffer = calloc(sizeOfLittleBuffer, sizeof(char));
 
@@ -251,7 +249,6 @@ int main(int argc, char **argv) {
               break;
             }
 
-            // lseek(inputFileDescriptor, -2 * bytesToRead, SEEK_CUR);
           }
         }
 
@@ -265,7 +262,6 @@ int main(int argc, char **argv) {
     }
     
     free(littleBuffer);
-    free(buffer);
   }
 
   closedir(d);
