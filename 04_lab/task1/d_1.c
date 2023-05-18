@@ -86,6 +86,7 @@ main:
 
   printf("value in var: %d\n", *addressToGet);
   // TODO: почему значение не затерлось ?!??!?!??!?!
+  // повезло-повезло
 
   printf("%p\n", addressToGet);
 

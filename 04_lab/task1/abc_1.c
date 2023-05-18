@@ -37,8 +37,13 @@ void showLocalAddresses() {
   const int myConst = 78;
   printf("const int: \t\t %p (%d)\n", &myConst, myConst);
 
-  const char *constChar = "h e l l o   m y  c o n s t n";
+  const char *constChar = "h e l l o   m y  c o n s t";
   printf("const char arr: \t %p (%s)\n", &constChar, constChar);
+
+
+  //
+  char *myBigArray = calloc(1 * 1024 * 1024, sizeof(char));
+  printf("my big arr: \t %p 0x%p (%s)\n", &myBigArray, myBigArray, myBigArray);
   
 }
 
