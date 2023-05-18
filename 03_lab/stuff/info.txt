@@ -41,3 +41,34 @@ https://www.geeksforgeeks.org/input-output-system-calls-c-create-open-close-read
 
 ну тип man сисколов для чтения, записи и тд:
 https://profile.iiita.ac.in/bibhas.ghoshal/lab_files/System%20calls%20for%20files%20and%20directories%20in%20Linux.html
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+https://linux-kernel-labs.github.io/refs/heads/master/labs/memory_mapping.html#:~:text=pfn%20%2D%20the%20page%20frame%20number,virtual%20address%20should%20be%20mapped
+очень очнеь полезная страница!!!!!!!!!!!! ALERT ALERT ALERT
+
+also about pagemap
+https://www.kernel.org/doc/Documentation/vm/pagemap.txt
+
+
+
+
+/*
+TODO: 
+  - почему нельзя создать симлинку на директорию? - Да, можно
+  - можно ли создать симлинку на симлинку? - LДа, можно
+  - можно ли создать хардлинку на симлинку? - Да, можно
+  - можно ли создать хардлинку на директорию? - Нет, нельзя, иначе будет цикл 
+*/
+
+taken from here: https://askubuntu.com/questions/210741/why-are-hard-links-not-allowed-for-directories
+
+Symlinks can:
+  -Point to directories
+  -Point to non-existent objects
+  -Point to files and directories outside the same filesystem
+
+
+Hard links can:
+  -Keep the file that they reference from being deleted
+
