@@ -219,15 +219,10 @@ int main(int argc, char **argv) {
           return 0;
         }
 
-        /*
-        TODO: -почему читать по байтам - это плохо?
-              FIX redaing by bytes !!!!!!!!!!!!
-        */
-
         off_t sizeFile = lseek(inputFileDescriptor, 0L, SEEK_END);
+        lseek(inputFileDescriptor, -sizeFile, SEEK_END);
 
         if (sizeFile <= sizeOfLittleBuffer) {
-          lseek(inputFileDescriptor, -sizeFile, SEEK_END);
           ssize_t readCount =
               read(inputFileDescriptor, littleBuffer, sizeFile);
           for (ssize_t i = sizeFile - 1; i >= 0; i--) {
@@ -236,29 +231,27 @@ int main(int argc, char **argv) {
         }
 
         else {
-          lseek(inputFileDescriptor, -sizeOfLittleBuffer, SEEK_END);
+          while (1) {
+            ssize_t bytesToRead = (sizeFile > sizeOfLittleBuffer)
+                                      ? sizeOfLittleBuffer
+                                      : sizeFile;
+            if(bytesToRead <= 0) {
+              break;
+            }
 
-          while (sizeFile > 0) {
-            ssize_t readCount =
-                read(inputFileDescriptor, littleBuffer,
-                     sizeOfLittleBuffer);
+            read(inputFileDescriptor, littleBuffer,
+                     bytesToRead); 
 
-            for (ssize_t i = sizeFile - 1; i >= 0; i--) {
+            for (ssize_t i = bytesToRead - 1; i >= 0; i--) {
               write(outputFileDescriptor, &littleBuffer[i], 1);
             }
 
-            lseek(inputFileDescriptor, -2 * sizeOfLittleBuffer,
-                  SEEK_CUR);
-            sizeFile -= sizeOfLittleBuffer;
-          }
+            sizeFile -= bytesToRead;
+            if(sizeFile <= 0) {
+              break;
+            }
 
-          ssize_t remainSizeFile = sizeFile;
-          lseek(inputFileDescriptor, -remainSizeFile, SEEK_CUR);
-          ssize_t readCount =
-              read(inputFileDescriptor, littleBuffer, remainSizeFile);
-
-          for (ssize_t i = remainSizeFile - 1; i >= 0; i--) {
-            write(outputFileDescriptor, &littleBuffer[i], 1);
+            // lseek(inputFileDescriptor, -2 * bytesToRead, SEEK_CUR);
           }
         }
 
@@ -270,7 +263,8 @@ int main(int argc, char **argv) {
         free(outputFilePath);
       }
     }
-
+    
+    free(littleBuffer);
     free(buffer);
   }
 
