@@ -233,6 +233,14 @@ int main(int argc, char **argv) {
           char *bufferToReverse =
               calloc(bytesToRead + 1, sizeof(char));
 
+          if (!bufferToReverse) {
+            free(endDirPath);
+            free(beforeLastDir);
+            free(nameReversedLastDir);
+            free(inputFilePath);
+            free(reversedFileNameCurr);
+          }
+
           for (int i = 0; i < bytesToRead; i++) {
             bufferToReverse[i] = littleBuffer[bytesToRead - i - 1];
           }
