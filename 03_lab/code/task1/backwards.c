@@ -220,36 +220,31 @@ int main(int argc, char **argv) {
         off_t sizeFile = lseek(inputFileDescriptor, 0L, SEEK_END);
         lseek(inputFileDescriptor, -sizeFile, SEEK_END);
 
-        if (sizeFile <= sizeOfLittleBuffer) {
-          ssize_t readCount =
-              read(inputFileDescriptor, littleBuffer, sizeFile);
-          for (ssize_t i = sizeFile - 1; i >= 0; i--) {
-            write(outputFileDescriptor, &littleBuffer[i], 1);
+        while (1) {
+          ssize_t bytesToRead = (sizeFile > sizeOfLittleBuffer)
+                                    ? sizeOfLittleBuffer
+                                    : sizeFile;
+          if (bytesToRead <= 0) {
+            break;
           }
-        }
 
-        else {
-          while (1) {
-            ssize_t bytesToRead = (sizeFile > sizeOfLittleBuffer)
-                                      ? sizeOfLittleBuffer
-                                      : sizeFile;
-            if(bytesToRead <= 0) {
-              break;
-            }
+          read(inputFileDescriptor, littleBuffer, bytesToRead);
 
-            read(inputFileDescriptor, littleBuffer,
-                     bytesToRead); 
+          char *bufferToReverse =
+              calloc(bytesToRead + 1, sizeof(char));
 
-            for (ssize_t i = bytesToRead - 1; i >= 0; i--) {
-              write(outputFileDescriptor, &littleBuffer[i], 1);
-            }
-
-            sizeFile -= bytesToRead;
-            if(sizeFile <= 0) {
-              break;
-            }
-
+          for (int i = 0; i < bytesToRead; i++) {
+            bufferToReverse[i] = littleBuffer[bytesToRead - i - 1];
           }
+
+          write(outputFileDescriptor, bufferToReverse, bytesToRead);
+
+          sizeFile -= bytesToRead;
+          if (sizeFile <= 0) {
+            break;
+          }
+
+          free(bufferToReverse);
         }
 
         close(inputFileDescriptor);
@@ -260,7 +255,7 @@ int main(int argc, char **argv) {
         free(outputFilePath);
       }
     }
-    
+
     free(littleBuffer);
   }
 
