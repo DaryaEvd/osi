@@ -5,13 +5,17 @@
 int main(int argc, char **argv) {
   long size = 0;
 
+  // v
   // const int block = 1024 * 100; // brk()
   const int block = 1024 * 1024; //mmap()
 
+  // i
   printf("pid: %d;  size: %ld\n", getpid(), size);
 
+  // i
   sleep(10);
 
+  // v
   while (1) {
     malloc(block);
     size += block;

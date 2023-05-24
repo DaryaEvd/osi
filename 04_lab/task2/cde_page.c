@@ -5,18 +5,22 @@
 #include <unistd.h>
 
 int main() {
+  // i
   printf("PID: %d\n", getpid());
+  
+  // ii
   sleep(10);
 
+  // viii
   void *p = mmap(NULL, 10 * getpagesize(),
                  PROT_READ | PROT_WRITE | PROT_EXEC,
                  MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
   printf("Mapped memory: p = %p\n", p);
   sleep(20);
 
- 
-  // mprotect(p, 10 * getpagesize(), PROT_READ);
+  // x
 
+  // mprotect(p, 10 * getpagesize(), PROT_READ);
   mprotect(p, 10 * getpagesize(), PROT_WRITE);
 
   char *array = (char *)p;

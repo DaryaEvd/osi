@@ -13,9 +13,14 @@ void function() {
 }
 
 int main(int argc, char **argv) {
+  // i
   pid_t pid = getpid();
   printf("main pid is: %d", pid);
+  
+  // ii
   sleep(10);
+
+  // iii
   function();
 
   return 0;
