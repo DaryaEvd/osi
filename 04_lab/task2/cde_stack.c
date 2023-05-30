@@ -17,11 +17,16 @@ int main(int argc, char **argv) {
   pid_t pid = getpid();
   printf("main pid is: %d", pid);
   
-  // ii
-  sleep(10);
+  // // ii
+  sleep(20);
 
-  // iii
+  // // iii
   function();
 
   return 0;
 }
+
+
+/*
+получим сигфолт
+*/
