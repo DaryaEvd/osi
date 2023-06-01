@@ -228,24 +228,59 @@ int main(int argc, char **argv) {
             break;
           }
 
-          read(inputFileDescriptor, littleBuffer, bytesToRead);
+          ssize_t readedAmount = 0;
+          while (readedAmount != bytesToRead) {
+            ssize_t count;
+            if ((count = read(inputFileDescriptor,
+                              littleBuffer + readedAmount,
+                              bytesToRead - readedAmount)) < 0) {
+              close(inputFileDescriptor);
+              close(outputFileDescriptor);
+              free(endDirPath);
+              free(beforeLastDir);
+              free(nameReversedLastDir);
+              free(inputFilePath);
+              free(reversedFileNameCurr);
+              return 0;
+            }
+            readedAmount += count;
+          }
 
           char *bufferToReverse =
               calloc(bytesToRead + 1, sizeof(char));
-
           if (!bufferToReverse) {
+            close(inputFileDescriptor);
+            close(outputFileDescriptor);
             free(endDirPath);
             free(beforeLastDir);
             free(nameReversedLastDir);
             free(inputFilePath);
             free(reversedFileNameCurr);
+            return 0;
           }
 
           for (int i = 0; i < bytesToRead; i++) {
             bufferToReverse[i] = littleBuffer[bytesToRead - i - 1];
           }
 
-          write(outputFileDescriptor, bufferToReverse, bytesToRead);
+          ssize_t writedAmount = 0;
+          while (writedAmount != bytesToRead) {
+            ssize_t count;
+            if ((count = write(outputFileDescriptor,
+                               bufferToReverse + writedAmount,
+                               bytesToRead - writedAmount)) < 0) {
+              close(inputFileDescriptor);
+              close(outputFileDescriptor);
+              free(endDirPath);
+              free(beforeLastDir);
+              free(nameReversedLastDir);
+              free(inputFilePath);
+              free(reversedFileNameCurr);
+              free(bufferToReverse);
+              return 0;
+            }
+            writedAmount += count;
+          }
 
           sizeFile -= bytesToRead;
           if (sizeFile <= 0) {
